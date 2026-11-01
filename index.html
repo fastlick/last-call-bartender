@@ -6,7 +6,7 @@
 #transfer{width:100%;margin-top:7px;background:#496f6d;border-color:#98c5bd;font-weight:700}#transfer:disabled{opacity:.45}#shakeZone{overflow:hidden}#shakerIcon{will-change:transform}.stirring #shakerIcon{animation:stirspin .5s ease-in-out}@keyframes stirspin{0%{transform:rotate(0deg)}30%{transform:rotate(22deg)}65%{transform:rotate(-20deg)}100%{transform:rotate(0deg)}}.shaking #shakerIcon{animation:shakemove .28s linear 2}@keyframes shakemove{0%{transform:translateX(-12px) rotate(-20deg)}50%{transform:translateX(12px) rotate(20deg)}100%{transform:translateX(-12px) rotate(-20deg)}}
  .gameViewport{position:relative;overflow:hidden;background:#16111d}#scene{width:100%;height:auto;display:block;aspect-ratio:320/185;image-rendering:pixelated;cursor:crosshair}.sceneHint{position:absolute;bottom:5px;left:6px;right:6px;background:#1d1826d9;border:1px solid #aa8266;border-radius:4px;padding:5px 6px;text-align:center;color:#ffdfb2;font-size:9px;pointer-events:none;letter-spacing:.2px}.panelHeader{display:flex;justify-content:space-between;align-items:center;padding:9px 12px;background:#35273b;border-top:2px solid #a77b65;border-bottom:1px solid #775b66;font-weight:700}.panelHeader button{min-height:35px;padding:5px 10px;background:#6d4d58;border-color:#c19a79}.controls[hidden]{display:none}.gameViewport:after{content:'';position:absolute;inset:0;pointer-events:none;background:linear-gradient(115deg,#fff7d90c 0%,transparent 42%,#100b1b29 100%)}.card{box-shadow:0 4px 0 #130e1c}#scene:focus{outline:2px solid #ffd68b}
 </style></head><body><main><header><div><h1>🍸 LAST CALL</h1><div class="small">PIXEL BARTENDER · CA ĐÊM</div></div><div style="text-align:right"><b id="money">0 xu</b><div class="small" id="count">0 khách</div></div></header>
-<div class="gameViewport"><canvas id="scene" width="320" height="185"></canvas><div class="sceneHint" id="sceneHint">CHẠM CHAI → GIỮ ĐỂ RÓT · CHẠM JIGGER → ĐỔ · VUỐT SHAKER → LẮC</div></div><div class="stats"><span id="volume">🥃 0 ml</span><span id="tech">Lắc 0 · Khuấy 0</span><span id="timer">0s</span></div>
+<div class="gameViewport"><canvas id="scene" width="320" height="185"></canvas><div class="sceneHint" id="sceneHint">VUỐT NỀN ĐỂ NHÌN QUANH · CHẠM DỤNG CỤ ĐỂ PHA CHẾ</div></div><div class="stats"><span id="volume">🥃 0 ml</span><span id="tech">Lắc 0 · Khuấy 0</span><span id="timer">0s</span></div>
 <section class="card"><h2 id="customer"></h2><p id="order"></p><div class="track"><div id="bar"></div></div><p id="contents">Ly trống</p></section>
 <div class="panelHeader"><span>🎛 BẢNG ĐIỀU KHIỂN</span><button id="togglePanel" aria-expanded="false">MỞ BẢNG ▾</button></div><div class="controls" id="controlPanel" hidden><div class="label">① ĐONG NGUYÊN LIỆU BẰNG JIGGER</div><div class="grid" id="ingredients"></div><div class="meter"><div id="meterFill"></div><div id="meterTarget"></div></div><div class="meterText" id="meterText">Chọn nguyên liệu để xem định lượng</div><button id="pour" disabled>CHỌN NGUYÊN LIỆU</button><button id="transfer" disabled>↪ ĐỔ JIGGER VÀO BÌNH PHA</button><div class="hint">Giữ nút để rót vào jigger 60 ml, thả ở vạch vàng, sau đó đổ vào bình pha. Có thể đong nhiều lượt.</div>
 <div class="label">② KỸ THUẬT PHA CHẾ</div><div class="tools"><button id="ice">🧊<strong>Đá</strong></button><button id="shake">🥤<strong>Shaker</strong></button><button id="stir">🥄<strong>Khuấy</strong></button><button id="garnish">🍋<strong>Garnish</strong></button></div>
@@ -20,7 +20,7 @@ const recipes=[
 {name:'GOLDEN HOUR',guest:'Khánh',items:{Cam:50,Dâu:30,Soda:100,Siro:10},method:'stir',steps:7,garnish:'Chanh',time:130}];
 const colors={Cam:'#f5a14c',Chanh:'#d7df6c',Soda:'#a6d8ed',Siro:'#b55f92',Dâu:'#d95372'};
 const $=id=>document.getElementById(id);
-let canvasDrag=null,canvasStartX=0,canvasLastX=0,canvasLastDir=0,canvasLastStep=0,canvasPourTimer=null,canvasSelectedBottle=null,canvasGlow=0,jiggerMl=0,jiggerIngredient=null,transferAnim=0,stirAnim=0,idx=0,cash=0,served=0,selected=null,liquid={},ice=false,shake=0,stir=0,garnish=null,started=Date.now(),finished=false,pourInterval=null,pourActive=false,pourStart=0,shakeAnim=0,particles=[],mood=0,customerEntering=0;
+let viewX=0,viewVelocity=0,panStart=0,panStartView=0,panMoved=false,canvasDrag=null,canvasStartX=0,canvasLastX=0,canvasLastDir=0,canvasLastStep=0,canvasPourTimer=null,canvasSelectedBottle=null,canvasGlow=0,jiggerMl=0,jiggerIngredient=null,transferAnim=0,stirAnim=0,idx=0,cash=0,served=0,selected=null,liquid={},ice=false,shake=0,stir=0,garnish=null,started=Date.now(),finished=false,pourInterval=null,pourActive=false,pourStart=0,shakeAnim=0,particles=[],mood=0,customerEntering=0;
 const recipe=()=>recipes[idx%recipes.length],total=()=>Object.values(liquid).reduce((a,b)=>a+b,0),say=s=>$('feedback').textContent=s;
 const target=()=>selected?Math.max(0,(recipe().items[selected]||0)-(liquid[selected]||0)):0;
 function refresh(){
@@ -86,6 +86,10 @@ function draw(){
  const t=Date.now()/1000,bob=Math.sin(t*1.65)*1.3,enter=Math.max(0,1-(Date.now()-customerEntering)/750),cx=160+enter*140;
  // First-person viewpoint: back wall and atmospheric bar seating
  rect(0,0,320,185,'#20192d');
+ // Extended lounge panorama, scrolling parallax layers
+ ctx.save();ctx.translate(-viewX*.28,0);
+ for(let i=-3;i<=3;i++){const x=160+i*138;rect(x-45,12,90,72,'#704c5b');rect(x-40,17,80,62,'#29283b');rect(x-34,21,68,51,'#494257');rect(x-26,31,52,2,'#8c6a6b');rect(x-28,49,56,3,'#8c6a6b');for(let j=0;j<5;j++){const bx=x-25+j*11;rect(bx,36,7,12,['#b96c68','#c9a15f','#7ea7a0'][j%3]);rect(bx+2,33,3,3,'#d8c6a4')}}
+ ctx.restore();
  for(let y=0;y<94;y+=13)for(let x=(y%26===0?0:-15);x<320;x+=30){rect(x,y,28,11,'#36293e');rect(x+2,y+2,24,7,'#3d3046')}
  rect(0,0,320,6,'#493043');
  // Backbar mirrors and hanging warm lamps
@@ -98,6 +102,10 @@ function draw(){
  // Depth: warm reflections and glass glints
  for(let i=0;i<8;i++){const x=18+i*42;rect(x,18,2,36,'#f2c88d16');rect(x+5,24,1,23,'#f4ddc41a')}
  rect(0,99,320,15,'#251b31');rect(0,112,320,7,'#6b4550');
+ // Extended seating areas on both sides of customer
+ ctx.save();ctx.translate(-viewX*.55,0);
+ for(let i=-3;i<=3;i++){const x=160+i*170;if(i===0)continue;rect(x-32,93,64,24,'#493747');rect(x-27,86,54,9,'#6a4a55');rect(x-16,72,32,18,'#66505b');rect(x-10,60,20,14,'#aa7b78');rect(x-12,56,24,7,'#3c3447');rect(x-25,111,50,4,'#c08c67');}
+ ctx.restore();
  // Guest faces bartender directly from the opposite side
  const outfit=['#4b7a7c','#a26e80','#6c815a'][idx%3],hair=['#3b303e','#53353d','#2b3a44'][idx%3];
  rect(cx-34,85+bob,68,41,outfit);rect(cx-25,67+bob,50,35,'#c9947e');
@@ -115,6 +123,10 @@ function draw(){
  rect(0,119,320,3,'#f3bf7a');rect(0,122,320,9,'#d3a175');rect(0,131,320,4,'#64404a');
  for(let y=140;y<185;y+=13){rect(0,y,320,2,'#7e544b');for(let x=15;x<320;x+=55)rect(x+(y%26)*2,y+3,2,7,'#aa7859')}
  rect(7,151,91,29,'#674956');rect(222,151,91,29,'#674956');
+ // Side workstations become visible while panning
+ ctx.save();ctx.translate(-viewX*.75,0);
+ for(let i=-2;i<=2;i++){if(i===0)continue;const sx=160+i*225;rect(sx-46,139,92,40,'#5d424c');rect(sx-42,142,84,4,'#d3a275');for(let j=0;j<5;j++){const xx=sx-35+j*16;rect(xx,151,10,23,['#a7c3c9','#b67a73','#bfa06c','#7da9a0'][j%4]);rect(xx+3,147,4,5,'#e3d3b8')}rect(sx-13,176,26,3,'#e0c5a1')}
+ ctx.restore();
  // Equipment on bartender's side, arranged around central mixing vessel
  rect(16,142,15,25,'#a5b8c4');rect(13,139,21,4,'#e5d8c4');rect(20,148,7,13,'#d9e2e7');
  rect(47,151,20,19,'#acbfc9');rect(43,147,28,4,'#e5d8c4');
@@ -142,6 +154,9 @@ function draw(){
  if(stirring){rect(155,174,15,8,'#d7a48b');rect(155,180,23,5,'#a46d63')}
  if(sh){rect(69,174,34,11,'#d7a48b');rect(69,182,40,5,'#a46d63')}
  particles=particles.filter(p=>p.life>0);for(const p of particles){rect(p.x,p.y,3,3,p.c);p.x+=p.vx;p.y+=p.vy;p.vy+=.06;p.life--}
+ // Panning HUD and subtle edge indicators
+ rect(110,4,100,3,'#382d3c');rect(152+viewX*.22,4,16,3,'#f0bf80');
+ if(viewX>25)txt('◀ TRAM PHA',4,178,'#ffdfb2');if(viewX< -25)txt('TRAM PHA ▶',249,178,'#ffdfb2');
  txt('LAST CALL',12,10,'#ffe2ad');txt('GOC NHIN BARTENDER',201,10,'#ffe2ad');
  requestAnimationFrame(draw);
 }
@@ -160,7 +175,7 @@ function bottleAt(p){if(p.y<128||p.y>180)return null;const names=['Cam','Chanh',
 function stopCanvasPour(){if(canvasPourTimer){clearInterval(canvasPourTimer);canvasPourTimer=null;}if(pourActive)stopPour();}
 scene.addEventListener('pointerdown',e=>{
  if(finished)return;
- const p=canvasPoint(e);canvasStartX=p.x;canvasLastX=p.x;canvasLastDir=0;
+ const p=canvasPoint(e);canvasStartX=p.x;canvasLastX=p.x;canvasLastDir=0;panStart=p.x;panStartView=viewX;panMoved=false;
  const bottle=bottleAt(p);
  if(bottle){
   if(jiggerMl&&jiggerIngredient!==bottle){say('Jigger đang chứa '+jiggerIngredient+'. Đổ vào bình trước khi đổi chai.');return;}
@@ -173,12 +188,13 @@ scene.addEventListener('pointerdown',e=>{
   canvasDrag='shaker';say('Vuốt shaker qua trái phải để lắc.');
  }else if(p.x>=134&&p.x<=190&&p.y>=125){
   canvasDrag='glass';say('Vuốt qua lại trên ly để khuấy.');
- }else{canvasDrag=null;return;}
+ }else{canvasDrag='pan';try{scene.setPointerCapture(e.pointerId)}catch(_){}return;}
  try{scene.setPointerCapture(e.pointerId)}catch(_){}
 });
 scene.addEventListener('pointermove',e=>{
  if(!canvasDrag||finished)return;
  const p=canvasPoint(e),dx=p.x-canvasLastX,dir=Math.sign(dx);
+ if(canvasDrag==='pan'){viewX=Math.max(-165,Math.min(165,panStartView+(panStart-p.x)*1.3));panMoved=panMoved||Math.abs(p.x-panStart)>5;return;}
  if((canvasDrag==='shaker'||canvasDrag==='glass')&&Math.abs(dx)>13&&dir!==canvasLastDir&&Date.now()-canvasLastStep>120){
   if(canvasDrag==='shaker')shakeStep();else $('stir').click();
   canvasLastStep=Date.now();canvasLastDir=dir;
@@ -187,6 +203,7 @@ scene.addEventListener('pointermove',e=>{
 });
 function endCanvasInteraction(){
  if(canvasDrag==='bottle')stopCanvasPour();
+ if(canvasDrag==='pan'&&panMoved)say('Đã di chuyển góc nhìn. Vuốt ngược lại để quay về trạm pha chế.');
  if(canvasDrag==='jigger'&&jiggerMl>0)$('transfer').click();
  canvasDrag=null;canvasSelectedBottle=null;
 }
