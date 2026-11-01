@@ -6,7 +6,7 @@
 #transfer{width:100%;margin-top:7px;background:#496f6d;border-color:#98c5bd;font-weight:700}#transfer:disabled{opacity:.45}#shakeZone{overflow:hidden}#shakerIcon{will-change:transform}.stirring #shakerIcon{animation:stirspin .5s ease-in-out}@keyframes stirspin{0%{transform:rotate(0deg)}30%{transform:rotate(22deg)}65%{transform:rotate(-20deg)}100%{transform:rotate(0deg)}}.shaking #shakerIcon{animation:shakemove .28s linear 2}@keyframes shakemove{0%{transform:translateX(-12px) rotate(-20deg)}50%{transform:translateX(12px) rotate(20deg)}100%{transform:translateX(-12px) rotate(-20deg)}}
  .gameViewport{position:relative;overflow:hidden;background:#16111d}#scene{width:100%;height:auto;display:block;aspect-ratio:320/185;image-rendering:pixelated;cursor:crosshair}.sceneHint{position:absolute;bottom:5px;left:6px;right:6px;background:#1d1826d9;border:1px solid #aa8266;border-radius:4px;padding:5px 6px;text-align:center;color:#ffdfb2;font-size:9px;pointer-events:none;letter-spacing:.2px}.panelHeader{display:flex;justify-content:space-between;align-items:center;padding:9px 12px;background:#35273b;border-top:2px solid #a77b65;border-bottom:1px solid #775b66;font-weight:700}.panelHeader button{min-height:35px;padding:5px 10px;background:#6d4d58;border-color:#c19a79}.controls[hidden]{display:none}.gameViewport:after{content:'';position:absolute;inset:0;pointer-events:none;background:linear-gradient(115deg,#fff7d90c 0%,transparent 42%,#100b1b29 100%)}.card{box-shadow:0 4px 0 #130e1c}#scene:focus{outline:2px solid #ffd68b}
 </style></head><body><main><header><div><h1>🍸 LAST CALL</h1><div class="small">PIXEL BARTENDER · CA ĐÊM</div></div><div style="text-align:right"><b id="money">0 xu</b><div class="small" id="count">0 khách</div></div></header>
-<div class="gameViewport"><canvas id="scene" width="320" height="185"></canvas><div class="sceneHint" id="sceneHint">VUỐT NỀN ĐỂ NHÌN QUANH · CHẠM DỤNG CỤ ĐỂ PHA CHẾ</div></div><div class="stats"><span id="volume">🥃 0 ml</span><span id="tech">Lắc 0 · Khuấy 0</span><span id="timer">0s</span></div>
+<div class="gameViewport"><canvas id="scene" width="320" height="185"></canvas><div class="sceneHint" id="sceneHint">TRẠM INOX · CHẠM ĐÁ / TRÁI CÂY / CHAI · VUỐT NỀN ĐỂ NHÌN</div></div><div class="stats"><span id="volume">🥃 0 ml</span><span id="tech">Lắc 0 · Khuấy 0</span><span id="timer">0s</span></div>
 <section class="card"><h2 id="customer"></h2><p id="order"></p><div class="track"><div id="bar"></div></div><p id="contents">Ly trống</p></section>
 <div class="panelHeader"><span>🎛 BẢNG ĐIỀU KHIỂN</span><button id="togglePanel" aria-expanded="false">MỞ BẢNG ▾</button></div><div class="controls" id="controlPanel" hidden><div class="label">① ĐONG NGUYÊN LIỆU BẰNG JIGGER</div><div class="grid" id="ingredients"></div><div class="meter"><div id="meterFill"></div><div id="meterTarget"></div></div><div class="meterText" id="meterText">Chọn nguyên liệu để xem định lượng</div><button id="pour" disabled>CHỌN NGUYÊN LIỆU</button><button id="transfer" disabled>↪ ĐỔ JIGGER VÀO BÌNH PHA</button><div class="hint">Giữ nút để rót vào jigger 60 ml, thả ở vạch vàng, sau đó đổ vào bình pha. Có thể đong nhiều lượt.</div>
 <div class="label">② KỸ THUẬT PHA CHẾ</div><div class="tools"><button id="ice">🧊<strong>Đá</strong></button><button id="shake">🥤<strong>Shaker</strong></button><button id="stir">🥄<strong>Khuấy</strong></button><button id="garnish">🍋<strong>Garnish</strong></button></div>
@@ -20,7 +20,7 @@ const recipes=[
 {name:'GOLDEN HOUR',guest:'Khánh',items:{Cam:50,Dâu:30,Soda:100,Siro:10},method:'stir',steps:7,garnish:'Chanh',time:130}];
 const colors={Cam:'#f5a14c',Chanh:'#d7df6c',Soda:'#a6d8ed',Siro:'#b55f92',Dâu:'#d95372'};
 const $=id=>document.getElementById(id);
-let viewX=0,viewVelocity=0,panStart=0,panStartView=0,panMoved=false,canvasDrag=null,canvasStartX=0,canvasLastX=0,canvasLastDir=0,canvasLastStep=0,canvasPourTimer=null,canvasSelectedBottle=null,canvasGlow=0,jiggerMl=0,jiggerIngredient=null,transferAnim=0,stirAnim=0,idx=0,cash=0,served=0,selected=null,liquid={},ice=false,shake=0,stir=0,garnish=null,started=Date.now(),finished=false,pourInterval=null,pourActive=false,pourStart=0,shakeAnim=0,particles=[],mood=0,customerEntering=0;
+let stationPulse=0,stationType='',viewX=0,viewVelocity=0,panStart=0,panStartView=0,panMoved=false,canvasDrag=null,canvasStartX=0,canvasLastX=0,canvasLastDir=0,canvasLastStep=0,canvasPourTimer=null,canvasSelectedBottle=null,canvasGlow=0,jiggerMl=0,jiggerIngredient=null,transferAnim=0,stirAnim=0,idx=0,cash=0,served=0,selected=null,liquid={},ice=false,shake=0,stir=0,garnish=null,started=Date.now(),finished=false,pourInterval=null,pourActive=false,pourStart=0,shakeAnim=0,particles=[],mood=0,customerEntering=0;
 const recipe=()=>recipes[idx%recipes.length],total=()=>Object.values(liquid).reduce((a,b)=>a+b,0),say=s=>$('feedback').textContent=s;
 const target=()=>selected?Math.max(0,(recipe().items[selected]||0)-(liquid[selected]||0)):0;
 function refresh(){
@@ -156,7 +156,7 @@ function draw(){
  particles=particles.filter(p=>p.life>0);for(const p of particles){rect(p.x,p.y,3,3,p.c);p.x+=p.vx;p.y+=p.vy;p.vy+=.06;p.life--}
  // Panning HUD and subtle edge indicators
  rect(110,4,100,3,'#382d3c');rect(152+viewX*.22,4,16,3,'#f0bf80');
- if(viewX>25)txt('◀ TRAM PHA',4,178,'#ffdfb2');if(viewX< -25)txt('TRAM PHA ▶',249,178,'#ffdfb2');
+ if(Date.now()-stationPulse<420){const xx=stationType==='ice'?40:213;rect(xx-17,132,35,2,'#fff2b4');}if(viewX>25)txt('◀ TRAM PHA',4,178,'#ffdfb2');if(viewX< -25)txt('TRAM PHA ▶',249,178,'#ffdfb2');
  txt('LAST CALL',12,10,'#ffe2ad');txt('GOC NHIN BARTENDER',201,10,'#ffe2ad');
  requestAnimationFrame(draw);
 }
@@ -182,6 +182,10 @@ scene.addEventListener('pointerdown',e=>{
   selected=bottle;canvasSelectedBottle=bottle;canvasDrag='bottle';canvasGlow=Date.now();refresh();
   pourActive=true;addPour();canvasPourTimer=setInterval(addPour,95);
   say('Đang rót '+bottle+' vào jigger. Nhấc ngón tay để dừng!');
+ }else if(p.x>=12&&p.x<=69&&p.y>=138){
+  $('ice').click();stationType='ice';stationPulse=Date.now();return;
+ }else if(p.x>=192&&p.x<=236&&p.y>=117&&p.y<140){
+  $('garnish').click();stationType='fruit';stationPulse=Date.now();return;
  }else if(p.x>=202&&p.x<=239&&p.y>=139){
   canvasDrag='jigger';say(jiggerMl?'Thả ngón tay để đổ '+jiggerMl+' ml vào bình.':'Jigger đang trống.');
  }else if(p.x>=75&&p.x<=122&&p.y>=133){
