@@ -3,12 +3,13 @@
 <style>
 *{box-sizing:border-box}body{margin:0;background:#17121e;color:#fbe6bd;font:14px system-ui,sans-serif}main{max-width:490px;margin:auto;background:#292037;min-height:100dvh;padding-bottom:22px}header{display:flex;justify-content:space-between;align-items:center;padding:14px;background:#181421;border-bottom:3px solid #a56b63}h1{font-size:20px;margin:0;color:#ffcf82}.small{font-size:11px;color:#cbb5ba}canvas{display:block;width:100%;image-rendering:pixelated;background:#352b43}.stats{display:flex;justify-content:space-between;padding:9px 13px;background:#49354d}.card{background:#1e1a2c;margin:10px;padding:12px;border:2px solid #986b73;border-radius:8px}.card h2{margin:0 0 6px;color:#ffd38c;font-size:17px}.card p{font-size:12px;line-height:1.5}.track{height:8px;background:#59485a;border-radius:6px;overflow:hidden}.track div{height:100%;background:#8dd3ac;width:100%}.controls{padding:0 10px}.label{font-size:12px;color:#e7bb86;margin:14px 0 7px;letter-spacing:1px}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.tools{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}.bottom{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}button{border:2px solid #a47a8d;border-bottom-width:4px;border-radius:8px;background:#58445f;color:#fff0d2;font:inherit;font-size:12px;min-height:53px;padding:7px;touch-action:none;cursor:pointer}button:active{transform:translateY(2px)}button.active{background:#966b52;border-color:#ffd18b}button strong{display:block;color:#ffd18b;font-size:15px}button:disabled{opacity:.4}#pour{width:100%;margin-top:8px;background:#9a6d47;border-color:#eec381;font-weight:700}#serve{background:#47765b;border-color:#8dc89e}#reset{background:#855654;border-color:#d99b8a}.feedback{margin:12px 10px;padding:12px;background:#1b1827;border-left:4px solid #e7b87b;font-size:12px;min-height:50px}.overlay{position:fixed;inset:0;background:#0e0a17e9;display:none;align-items:center;justify-content:center;padding:20px}.overlay.show{display:flex}.dialog{background:#30253b;border:3px solid #efbd7b;border-radius:12px;padding:20px;width:min(400px,100%);text-align:center}.dialog h2{color:#ffce86}.dialog button{width:100%;background:#46785d}.score{font-size:42px;font-weight:900;color:#ffcd85}.hint{font-size:11px;color:#c6b5c8;margin-top:5px}
 .meter{height:20px;background:#161322;border:2px solid #aa7a7b;border-radius:5px;margin-top:9px;position:relative;overflow:hidden}.meter #meterFill{height:100%;width:0;background:linear-gradient(90deg,#e6b06e,#ffdd92);transition:width .08s}.meter #meterTarget{position:absolute;top:0;bottom:0;left:0;border-left:3px dashed #fff1a5}.meterText{font-size:11px;margin:5px 0;color:#f1c998}#shakeZone{display:flex;align-items:center;gap:12px;margin-top:10px;padding:10px;border:2px dashed #b68f92;border-radius:9px;background:#342b40;touch-action:none;user-select:none;min-height:82px}#shakerIcon{font-size:42px;transform:rotate(0deg);transition:transform .07s}#shakeZone.active{border-color:#ffd68d;background:#554059}#shakeZone b{font-size:12px;color:#ffe1a3}canvas{touch-action:none}.feedback{line-height:1.5}button:focus-visible{outline:3px solid #ffe3a2}
+#transfer{width:100%;margin-top:7px;background:#496f6d;border-color:#98c5bd;font-weight:700}#transfer:disabled{opacity:.45}#shakeZone{overflow:hidden}#shakerIcon{will-change:transform}.stirring #shakerIcon{animation:stirspin .5s ease-in-out}@keyframes stirspin{0%{transform:rotate(0deg)}30%{transform:rotate(22deg)}65%{transform:rotate(-20deg)}100%{transform:rotate(0deg)}}.shaking #shakerIcon{animation:shakemove .28s linear 2}@keyframes shakemove{0%{transform:translateX(-12px) rotate(-20deg)}50%{transform:translateX(12px) rotate(20deg)}100%{transform:translateX(-12px) rotate(-20deg)}}
 </style></head><body><main><header><div><h1>🍸 LAST CALL</h1><div class="small">PIXEL BARTENDER · CA ĐÊM</div></div><div style="text-align:right"><b id="money">0 xu</b><div class="small" id="count">0 khách</div></div></header>
 <canvas id="scene" width="320" height="185"></canvas><div class="stats"><span id="volume">🥃 0 ml</span><span id="tech">Lắc 0 · Khuấy 0</span><span id="timer">0s</span></div>
 <section class="card"><h2 id="customer"></h2><p id="order"></p><div class="track"><div id="bar"></div></div><p id="contents">Ly trống</p></section>
-<div class="controls"><div class="label">① CHỌN NGUYÊN LIỆU VÀ GIỮ NÚT RÓT</div><div class="grid" id="ingredients"></div><div class="meter"><div id="meterFill"></div><div id="meterTarget"></div></div><div class="meterText" id="meterText">Chọn nguyên liệu để xem định lượng</div><button id="pour" disabled>CHỌN NGUYÊN LIỆU</button><div class="hint">Giữ để rót, thả đúng vạch vàng. Rót quá tay không thể hoàn tác!</div>
+<div class="controls"><div class="label">① ĐONG NGUYÊN LIỆU BẰNG JIGGER</div><div class="grid" id="ingredients"></div><div class="meter"><div id="meterFill"></div><div id="meterTarget"></div></div><div class="meterText" id="meterText">Chọn nguyên liệu để xem định lượng</div><button id="pour" disabled>CHỌN NGUYÊN LIỆU</button><button id="transfer" disabled>↪ ĐỔ JIGGER VÀO BÌNH PHA</button><div class="hint">Giữ nút để rót vào jigger 60 ml, thả ở vạch vàng, sau đó đổ vào bình pha. Có thể đong nhiều lượt.</div>
 <div class="label">② KỸ THUẬT PHA CHẾ</div><div class="tools"><button id="ice">🧊<strong>Đá</strong></button><button id="shake">🥤<strong>Shaker</strong></button><button id="stir">🥄<strong>Khuấy</strong></button><button id="garnish">🍋<strong>Garnish</strong></button></div>
-<div id="shakeZone"><div id="shakerIcon">🥤</div><div><b>SHAKE ZONE</b><div class="hint">Vuốt trái ↔ phải liên tục để lắc · <span id="shakeProgress">0 nhịp</span></div></div></div><div class="bottom"><button id="serve">✓ PHỤC VỤ</button><button id="reset">↺ LÀM LẠI</button></div></div><div class="feedback" id="feedback">Chào mừng! Hãy pha đồ uống đầu tiên.</div></main>
+<div id="shakeZone"><div id="shakerIcon">🥤</div><div><b>SHAKE ZONE</b><div class="hint">Vuốt trái ↔ phải để lắc · <span id="shakeProgress">0 nhịp</span></div></div></div><div class="bottom"><button id="serve">✓ PHỤC VỤ</button><button id="reset">↺ LÀM LẠI</button></div></div><div class="feedback" id="feedback">Chào mừng! Hãy pha đồ uống đầu tiên.</div></main>
 <div class="overlay" id="overlay"><div class="dialog"><h2 id="resultTitle"></h2><div class="score" id="score"></div><p id="details"></p><button id="next">KHÁCH TIẾP THEO →</button></div></div>
 <script>
 'use strict';
@@ -18,45 +19,48 @@ const recipes=[
 {name:'GOLDEN HOUR',guest:'Khánh',items:{Cam:50,Dâu:30,Soda:100,Siro:10},method:'stir',steps:7,garnish:'Chanh',time:130}];
 const colors={Cam:'#f5a14c',Chanh:'#d7df6c',Soda:'#a6d8ed',Siro:'#b55f92',Dâu:'#d95372'};
 const $=id=>document.getElementById(id);
-let idx=0,cash=0,served=0,selected=null,liquid={},ice=false,shake=0,stir=0,garnish=null,started=Date.now(),finished=false,pourInterval=null,pourActive=false,pourStart=0,shakeAnim=0,particles=[],mood=0,customerEntering=0;
+let jiggerMl=0,jiggerIngredient=null,transferAnim=0,stirAnim=0,idx=0,cash=0,served=0,selected=null,liquid={},ice=false,shake=0,stir=0,garnish=null,started=Date.now(),finished=false,pourInterval=null,pourActive=false,pourStart=0,shakeAnim=0,particles=[],mood=0,customerEntering=0;
 const recipe=()=>recipes[idx%recipes.length],total=()=>Object.values(liquid).reduce((a,b)=>a+b,0),say=s=>$('feedback').textContent=s;
-const target=()=>selected?(recipe().items[selected]||0):0;
+const target=()=>selected?Math.max(0,(recipe().items[selected]||0)-(liquid[selected]||0)):0;
 function refresh(){
  $('volume').textContent='🥃 '+total()+' ml'+(ice?' · 🧊':'');
  $('tech').textContent='Lắc '+shake+' · Khuấy '+stir;
  $('contents').textContent=Object.entries(liquid).filter(([k,v])=>v>0).map(([k,v])=>k+' '+v+'ml').join(' · ')||'Ly trống';
- $('pour').textContent=selected?'GIỮ RÓT '+selected.toUpperCase()+' · '+(liquid[selected]||0)+' ml':'CHỌN NGUYÊN LIỆU';
+ $('pour').textContent=selected?'GIỮ RÓT VÀO JIGGER · '+jiggerMl+' / 60 ml':'CHỌN NGUYÊN LIỆU';
+ $('transfer').disabled=finished||jiggerMl<=0;
+ $('transfer').textContent=jiggerMl?'↪ ĐỔ '+jiggerMl+' ml '+jiggerIngredient+' VÀO BÌNH':'↪ JIGGER ĐANG TRỐNG';
  $('pour').disabled=!selected||finished;
  $('garnish').innerHTML='🍋<strong>'+(garnish||'Garnish')+'</strong>';
  $('shakeProgress').textContent=shake+' nhịp';
  document.querySelectorAll('[data-name]').forEach(b=>b.classList.toggle('active',b.dataset.name===selected));
- const max=Math.max(120,target()*1.5,liquid[selected]||0);
- $('meterFill').style.width=selected?Math.min(100,(liquid[selected]||0)/max*100)+'%':'0%';
+ const max=60;
+ $('meterFill').style.width=selected?Math.min(100,jiggerMl/max*100)+'%':'0%';
  $('meterTarget').style.left=selected?Math.min(100,target()/max*100)+'%':'0%';
- $('meterText').textContent=selected?'Đã rót '+(liquid[selected]||0)+' ml / Mục tiêu '+target()+' ml'+(target()===0?' (không có trong công thức)':''):'Chọn nguyên liệu để xem định lượng';
+ $('meterText').textContent=selected?'Jigger '+jiggerMl+'/60 ml · Cần thêm '+target()+' ml '+selected+(target()>60?' (đong nhiều lượt)':''):'Chọn nguyên liệu để xem định lượng';
 }
-function clearGlass(){stopPour();selected=null;liquid={};ice=false;shake=0;stir=0;garnish=null;finished=false;particles=[];refresh();}
+function clearGlass(){stopPour();jiggerMl=0;jiggerIngredient=null;transferAnim=0;selected=null;liquid={};ice=false;shake=0;stir=0;garnish=null;finished=false;particles=[];refresh();}
 function nextOrder(){clearGlass();started=Date.now();customerEntering=Date.now();mood=0;const r=recipe();$('customer').textContent='🛎 '+r.guest+' | '+r.name;$('order').textContent=Object.entries(r.items).map(([k,v])=>k+' '+v+'ml').join(' · ')+' · '+(r.method==='shake'?'Lắc ':'Khuấy ')+r.steps+' nhịp · Đá · Trang trí '+r.garnish;$('overlay').classList.remove('show');say(r.guest+': Cho mình một '+r.name+' nhé!');}
 $('ingredients').innerHTML=Object.keys(colors).map(n=>'<button data-name="'+n+'"><strong style="color:'+colors[n]+'">● '+n+'</strong><small>Nguyên liệu</small></button>').join('');
-document.querySelectorAll('[data-name]').forEach(b=>b.onclick=()=>{selected=b.dataset.name;refresh();say('Đã cầm chai '+selected+'. Canh vạch vàng rồi thả tay.')});
+document.querySelectorAll('[data-name]').forEach(b=>b.onclick=()=>{if(jiggerMl>0&&jiggerIngredient!==b.dataset.name){say('Hãy đổ hoặc bỏ phần trong jigger trước khi đổi chai.');return;}selected=b.dataset.name;refresh();say('Đã cầm chai '+selected+'. Đong vào jigger theo vạch vàng.')});
 function spawn(x,y,c,n=8){for(let i=0;i<n;i++)particles.push({x,y,vx:(Math.random()-.5)*2,vy:-Math.random()*2-.5,life:35+Math.random()*18,c})}
-function stopPour(){if(pourInterval){clearInterval(pourInterval);pourInterval=null;}if(pourActive){pourActive=false;const got=liquid[selected]||0,goal=target();if(goal>0)say(Math.abs(got-goal)<=4?'🎯 Đong chính xác!':got>goal?'⚠️ Rót quá '+(got-goal)+' ml.':'Còn thiếu '+(goal-got)+' ml.');refresh();}}
-function addPour(){if(!selected||finished)return;liquid[selected]=Math.min(400,(liquid[selected]||0)+2);if(Math.random()<.7)spawn(159,108,colors[selected],2);refresh();}
-$('pour').addEventListener('pointerdown',e=>{e.preventDefault();if(!selected||finished)return;stopPour();pourActive=true;pourStart=Date.now();addPour();pourInterval=setInterval(addPour,85);try{e.currentTarget.setPointerCapture(e.pointerId)}catch(_){}});
+function stopPour(){if(pourInterval){clearInterval(pourInterval);pourInterval=null;}if(pourActive){pourActive=false;const got=jiggerMl,goal=Math.min(60,target());if(goal>0)say(Math.abs(got-goal)<=4?'🎯 Đong chính xác!':got>goal?'⚠️ Rót quá '+(got-goal)+' ml.':'Còn thiếu '+(goal-got)+' ml.');refresh();}}
+function addPour(){if(!selected||finished||jiggerMl>=60)return;if(jiggerIngredient&&jiggerIngredient!==selected)return;jiggerIngredient=selected;jiggerMl=Math.min(60,jiggerMl+1);if(Math.random()<.8)spawn(237,105,colors[selected],2);refresh();}
+$('pour').addEventListener('pointerdown',e=>{e.preventDefault();if(!selected||finished)return;stopPour();pourActive=true;pourStart=Date.now();addPour();pourInterval=setInterval(addPour,95);try{e.currentTarget.setPointerCapture(e.pointerId)}catch(_){}});
 ['pointerup','pointercancel','lostpointercapture'].forEach(e=>$('pour').addEventListener(e,stopPour));window.addEventListener('pointerup',stopPour);window.addEventListener('blur',stopPour);
+$('transfer').onclick=()=>{if(finished||!jiggerMl||!jiggerIngredient)return;stopPour();liquid[jiggerIngredient]=(liquid[jiggerIngredient]||0)+jiggerMl;transferAnim=Date.now();spawn(159,110,colors[jiggerIngredient],16);const amount=jiggerMl,name=jiggerIngredient;jiggerMl=0;jiggerIngredient=null;refresh();say('Đã đổ '+amount+' ml '+name+' từ jigger vào bình pha.');};
 $('ice').onclick=()=>{if(finished)return;ice=true;spawn(165,112,'#e7f8ff',10);refresh();say('🧊 Đá đã vào ly.')};
-function shakeStep(){if(finished)return;shake++;shakeAnim=Date.now();spawn(161,106,'#f1e4bd',6);refresh();if(shake===recipe().steps)say('✨ Đã đủ '+shake+' nhịp lắc!');else say('Shake! '+shake+' nhịp.');}
+function shakeStep(){if(finished)return;shake++;shakeAnim=Date.now();$('shakeZone').classList.remove('shaking');void $('shakeZone').offsetWidth;$('shakeZone').classList.add('shaking');spawn(161,106,'#f1e4bd',6);refresh();if(shake===recipe().steps)say('✨ Đã đủ '+shake+' nhịp lắc!');else say('Shake! '+shake+' nhịp.');}
 $('shake').onclick=()=>{shakeStep();$('shakeZone').scrollIntoView({block:'nearest',behavior:'smooth'})};
 let pointer=null,lastX=0,lastDir=0,lastShakeAt=0;
 $('shakeZone').addEventListener('pointerdown',e=>{if(finished)return;pointer=e.pointerId;lastX=e.clientX;lastDir=0;try{e.currentTarget.setPointerCapture(e.pointerId)}catch(_){};$('shakeZone').classList.add('active')});
 $('shakeZone').addEventListener('pointermove',e=>{if(pointer!==e.pointerId||finished)return;const dx=e.clientX-lastX,dir=Math.sign(dx);if(Math.abs(dx)>24){if(dir!==lastDir&&Date.now()-lastShakeAt>115){shakeStep();lastShakeAt=Date.now();lastDir=dir;}lastX=e.clientX;}});
 function endShake(){pointer=null;$('shakeZone').classList.remove('active')}
 ['pointerup','pointercancel','lostpointercapture'].forEach(e=>$('shakeZone').addEventListener(e,endShake));
-$('stir').onclick=()=>{if(finished)return;stir++;spawn(165,112,'#bde6ee',3);refresh();say('Khuấy '+stir+' nhịp.')};
+$('stir').onclick=()=>{if(finished)return;stir++;stirAnim=Date.now();$('shakeZone').classList.remove('stirring');void $('shakeZone').offsetWidth;$('shakeZone').classList.add('stirring');spawn(165,112,'#bde6ee',3);refresh();say('Khuấy '+stir+' nhịp.')};
 $('garnish').onclick=()=>{if(finished)return;const a=[null,'Cam','Chanh','Dâu'];garnish=a[(a.indexOf(garnish)+1)%a.length];refresh();say('Trang trí: '+(garnish||'không'))};
 $('reset').onclick=()=>{clearGlass();say('Đã thay ly mới. Đồng hồ vẫn chạy!')};
 $('serve').onclick=()=>{
- if(finished)return;finished=true;stopPour();
+ if(finished)return;stopPour();if(jiggerMl>0){say('⚠️ Jigger vẫn còn nguyên liệu. Hãy đổ vào bình trước khi phục vụ.');return;}finished=true;
  const r=recipe(),keys=new Set([...Object.keys(r.items),...Object.keys(liquid)]);let error=0;
  keys.forEach(k=>error+=Math.abs((r.items[k]||0)-(liquid[k]||0)));
  const required=Object.values(r.items).reduce((a,b)=>a+b,0),a=Math.max(0,Math.round(45*(1-error/(required*1.4))));
@@ -97,14 +101,14 @@ function draw(){
  rect(74,96,27,7,'#d6a68a');rect(90,103,13,22,'#b57c6c');rect(217,99,27,7,'#d6a68a');rect(217,105,11,18,'#b57c6c');
  // Shaker and jigger on bar
  const shakeOffset=Date.now()-shakeAnim<240?Math.sin(t*70)*8:0;
- rect(67+shakeOffset,103,18,24,'#a4b5c6');rect(64+shakeOffset,100,24,5,'#e4e7df');rect(71+shakeOffset,110,9,12,'#d5dce3');rect(236,111,12,14,'#b7c9d3');rect(233,108,18,3,'#e3d8c2');
+ rect(67+shakeOffset,103,18,24,'#a4b5c6');rect(64+shakeOffset,100,24,5,'#e4e7df');rect(71+shakeOffset,110,9,12,'#d5dce3');rect(236,111,12,14,'#b7c9d3');rect(233,108,18,3,'#e3d8c2');if(jiggerMl){const h=Math.round(jiggerMl/60*12);rect(238,124-h,8,h,colors[jiggerIngredient]||'#e8ae71');}txt('JIGGER',224,140);txt(jiggerMl+'/60',233,150);
  // Glass and liquid, pouring stream
  rect(139,95,43,4,'#d9e9ef');rect(143,98,35,34,'#b7dce555');rect(143,98,3,34,'#b7dce5');rect(175,98,3,34,'#b7dce5');rect(143,130,35,4,'#b7dce5');
- const amount=total(),entries=Object.entries(liquid).filter(([k,v])=>v>0),dominant=entries.sort((a,b)=>b[1]-a[1])[0]?.[0];
+ const stirring=Date.now()-stirAnim<580, transferring=Date.now()-transferAnim<650; if(stirring){rect(159+Math.sin(t*24)*9,96,2,31,'#d7d5c7');for(let i=0;i<3;i++)rect(152+i*8,118+Math.sin(t*24+i)*3,4,2,'#eff9f4');}if(transferring){rect(212,92,18,14,'#b7c9d3');rect(205,100,5,24,'#e6c998');for(let i=0;i<4;i++)rect(200-i*9,112+i*3,4,5,'#f0b46c');} const amount=total(),entries=Object.entries(liquid).filter(([k,v])=>v>0),dominant=entries.sort((a,b)=>b[1]-a[1])[0]?.[0];
  if(amount){const level=Math.min(29,Math.round(amount/280*29)),wave=Math.sin(t*7)*1.2;rect(146,130-level+wave,29,level-wave,colors[dominant]||'#e5a46e');rect(148,130-level+wave,4,level-wave,'#ffffff55')}
  if(ice)for(let i=0;i<4;i++)rect(149+i*7,124-i%2*6,5,5,'#e7f8ff');
  if(garnish){rect(173,95,12,5,colors[garnish]);rect(180,91,4,5,'#76b97c')}
- if(pourActive&&selected){rect(107,82,10,22,colors[selected]);rect(109,77,6,6,'#e8d5b4');rect(119,95,3,15,colors[selected]);for(let i=0;i<4;i++)rect(122+i*6,110+i*2+Math.sin(t*12+i)*2,3,4,colors[selected]);}
+ if(pourActive&&selected){rect(257,77,10,22,colors[selected]);rect(259,72,6,6,'#e8d5b4');rect(252,96,3,12,colors[selected]);for(let i=0;i<4;i++)rect(250-i*2,108+i*3+Math.sin(t*12+i)*2,2,4,colors[selected]);}
  particles=particles.filter(p=>p.life>0);for(const p of particles){rect(p.x,p.y,3,3,p.c);p.x+=p.vx;p.y+=p.vy;p.vy+=.06;p.life--}
  txt('LAST CALL',12,11,'#f6d7a2');txt('CA DEM',276,11,'#f6d7a2');
  requestAnimationFrame(draw);
