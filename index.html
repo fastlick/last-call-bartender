@@ -82,35 +82,60 @@ const canvas=$('scene'),ctx=canvas.getContext('2d');ctx.imageSmoothingEnabled=fa
 function rect(x,y,w,h,c){ctx.fillStyle=c;ctx.fillRect(Math.round(x),Math.round(y),w,h)}
 function txt(s,x,y,c='#ffe1a5'){ctx.font='bold 8px monospace';ctx.fillStyle=c;ctx.fillText(s,x,y)}
 function draw(){
- const t=Date.now()/1000,bob=Math.sin(t*1.7)*1.5,enter=Math.max(0,1-(Date.now()-customerEntering)/650),cx=178+enter*90;
- rect(0,0,320,185,'#201c30');
- // Brick walls, decorative sconces and warm animated lighting
- for(let y=6;y<69;y+=14)for(let x=(y%28===6?0:-12);x<320;x+=31){rect(x,y,29,12,'#3b3044');rect(x+1,y+1,27,10,'#403449')}
- rect(0,4,320,5,'#4d3448');rect(0,64,320,7,'#c28b5f');
- for(const x of [27,291]){rect(x-5,10,10,17,'#5d4951');rect(x-2,14,4,8,'#ffcf73');rect(x-9,25,18,3,'#a96f56');rect(x-15,29,30,2,'#e8a25c22')}
- // Shelves and bottles
- for(const y of [25,51]){rect(49,y,223,4,'#96604f');rect(49,y+4,223,2,'#392735')}
- for(let i=0;i<18;i++){const x=55+i*12,y=i%2?29:5,h=i%2?20:19,c=['#b7637e','#dbac62','#66a1a0','#9879ae','#bc7b4e'][i%5];rect(x+3,y,6,h,c);rect(x+4,y-4,4,5,'#d6c5a3');rect(x+4,y+6,3,3,'#f5ddc5aa')}
- // Customer animated portrait, arms, hair, face
- rect(cx-28,75+bob,57,44,['#476d7a','#846077','#5c7958'][idx%3]);rect(cx-22,65+bob,44,31,'#d8a489');rect(cx-24,58+bob,48,13,['#453447','#563c3f','#313b4b'][idx%3]);rect(cx-19,53+bob,35,8,['#453447','#563c3f','#313b4b'][idx%3]);rect(cx-16,78+bob,4,4,'#322938');rect(cx+11,78+bob,4,4,'#322938');rect(cx-2,89+bob,mood===1?10:7,2,mood===-1?'#a64f61':'#9b5664');rect(cx-26,110+bob,52,5,'#2a2637');
- // Customer speech bubble
- rect(cx-62,33+bob,83,17,'#f7e0b6');rect(cx-61,34+bob,81,15,'#eed4ab');rect(cx-11,50+bob,6,5,'#eed4ab');txt(finished?(mood>0?'NGON QUA!':'HMM...'):'CHO MINH 1 LY!',cx-57,44+bob,'#493142');
- // Counter with side decorations
- rect(0,115,320,70,'#4c3445');rect(0,115,320,12,'#a46c57');rect(0,125,320,8,'#d09b71');rect(0,133,320,50,'#754b4b');for(let x=0;x<320;x+=35){rect(x,137,2,48,'#6b4345');rect(x+4,160,27,2,'#92625b')}
- // Bartender hands, mixing station
- rect(74,96,27,7,'#d6a68a');rect(90,103,13,22,'#b57c6c');rect(217,99,27,7,'#d6a68a');rect(217,105,11,18,'#b57c6c');
- // Shaker and jigger on bar
- const shakeOffset=Date.now()-shakeAnim<240?Math.sin(t*70)*8:0;
- rect(67+shakeOffset,103,18,24,'#a4b5c6');rect(64+shakeOffset,100,24,5,'#e4e7df');rect(71+shakeOffset,110,9,12,'#d5dce3');rect(236,111,12,14,'#b7c9d3');rect(233,108,18,3,'#e3d8c2');if(jiggerMl){const h=Math.round(jiggerMl/60*12);rect(238,124-h,8,h,colors[jiggerIngredient]||'#e8ae71');}txt('JIGGER',224,140);txt(jiggerMl+'/60',233,150);
- // Glass and liquid, pouring stream
- rect(139,95,43,4,'#d9e9ef');rect(143,98,35,34,'#b7dce555');rect(143,98,3,34,'#b7dce5');rect(175,98,3,34,'#b7dce5');rect(143,130,35,4,'#b7dce5');
- const stirring=Date.now()-stirAnim<580, transferring=Date.now()-transferAnim<650; if(stirring){rect(159+Math.sin(t*24)*9,96,2,31,'#d7d5c7');for(let i=0;i<3;i++)rect(152+i*8,118+Math.sin(t*24+i)*3,4,2,'#eff9f4');}if(transferring){rect(212,92,18,14,'#b7c9d3');rect(205,100,5,24,'#e6c998');for(let i=0;i<4;i++)rect(200-i*9,112+i*3,4,5,'#f0b46c');} const amount=total(),entries=Object.entries(liquid).filter(([k,v])=>v>0),dominant=entries.sort((a,b)=>b[1]-a[1])[0]?.[0];
- if(amount){const level=Math.min(29,Math.round(amount/280*29)),wave=Math.sin(t*7)*1.2;rect(146,130-level+wave,29,level-wave,colors[dominant]||'#e5a46e');rect(148,130-level+wave,4,level-wave,'#ffffff55')}
- if(ice)for(let i=0;i<4;i++)rect(149+i*7,124-i%2*6,5,5,'#e7f8ff');
- if(garnish){rect(173,95,12,5,colors[garnish]);rect(180,91,4,5,'#76b97c')}
- if(pourActive&&selected){rect(257,77,10,22,colors[selected]);rect(259,72,6,6,'#e8d5b4');rect(252,96,3,12,colors[selected]);for(let i=0;i<4;i++)rect(250-i*2,108+i*3+Math.sin(t*12+i)*2,2,4,colors[selected]);}
+ const t=Date.now()/1000,bob=Math.sin(t*1.65)*1.3,enter=Math.max(0,1-(Date.now()-customerEntering)/750),cx=160+enter*140;
+ // First-person viewpoint: back wall and atmospheric bar seating
+ rect(0,0,320,185,'#20192d');
+ for(let y=0;y<94;y+=13)for(let x=(y%26===0?0:-15);x<320;x+=30){rect(x,y,28,11,'#36293e');rect(x+2,y+2,24,7,'#3d3046')}
+ rect(0,0,320,6,'#493043');
+ // Backbar mirrors and hanging warm lamps
+ rect(12,12,67,66,'#a77760');rect(16,16,59,58,'#353348');rect(19,20,53,45,'#4d4257');
+ rect(241,12,67,66,'#a77760');rect(245,16,59,58,'#353348');rect(248,20,53,45,'#4d4257');
+ for(let i=0;i<2;i++){let x=i?276:44;rect(x-2,0,4,14,'#796078');rect(x-12,14,24,8,'#bc8b57');rect(x-8,22,16,5,'#f6c377');rect(x-16,27,32,10,'#edb15d22')}
+ // Background tables and silhouetted patrons
+ for(const [x,y] of [[30,80],[280,78],[67,93],[256,92]]){rect(x-9,y-9,18,21,'#514155');rect(x-6,y-19,12,13,'#8f6970');rect(x-11,y+9,22,4,'#6a4d57')}
+ rect(0,96,320,5,'#b88762');
+ // Guest faces bartender directly from the opposite side
+ const outfit=['#4b7a7c','#a26e80','#6c815a'][idx%3],hair=['#3b303e','#53353d','#2b3a44'][idx%3];
+ rect(cx-34,85+bob,68,41,outfit);rect(cx-25,67+bob,50,35,'#c9947e');
+ rect(cx-28,58+bob,56,17,hair);rect(cx-21,52+bob,44,11,hair);
+ rect(cx-17,80+bob,5,4,'#302536');rect(cx+12,80+bob,5,4,'#302536');
+ if(mood===1){rect(cx-5,92+bob,12,2,'#a85b62');rect(cx-3,94+bob,8,2,'#a85b62')}
+ else if(mood===-1){rect(cx-5,96+bob,12,2,'#a85b62')}else rect(cx-4,93+bob,9,2,'#99545f');
+ rect(cx-39,114+bob,18,8,'#c9947e');rect(cx+21,114+bob,18,8,'#c9947e');
+ // Guest speech bubble
+ rect(cx-56,31+bob,112,18,'#f2dfba');rect(cx-55,32+bob,110,16,'#f2dfba');rect(cx+10,49+bob,7,5,'#f2dfba');
+ txt(finished?(mood>0?'NGON LAM! CAM ON!':'MINH MUON LY KHAC'):'CHO MINH '+recipe().name+'!',cx-51,43+bob,'#4b3340');
+ // Counter: wide perspective wooden surface in the foreground
+ rect(0,122,320,63,'#92654e');rect(0,122,320,9,'#d3a175');rect(0,131,320,4,'#64404a');
+ for(let y=140;y<185;y+=13){rect(0,y,320,2,'#7e544b');for(let x=15;x<320;x+=55)rect(x+(y%26)*2,y+3,2,7,'#aa7859')}
+ rect(7,151,91,29,'#674956');rect(222,151,91,29,'#674956');
+ // Equipment on bartender's side, arranged around central mixing vessel
+ rect(16,142,15,25,'#a5b8c4');rect(13,139,21,4,'#e5d8c4');rect(20,148,7,13,'#d9e2e7');
+ rect(47,151,20,19,'#acbfc9');rect(43,147,28,4,'#e5d8c4');
+ for(let i=0;i<4;i++){let x=240+i*17;rect(x,143,11,28,[colors.Cam,colors.Chanh,colors.Dâu,colors.Siro][i]);rect(x+3,137,5,7,'#e8d5b4');rect(x+2,154,7,4,'#f8e1bb99')}
+ // Shaker tilts and moves on interaction
+ const sh=Date.now()-shakeAnim<350,dx=sh?Math.sin(t*65)*12:0,ang=sh?Math.sin(t*65)*5:0;
+ rect(85+dx,142+ang,23,31,'#8eacbb');rect(82+dx,139+ang,29,6,'#e1e5de');rect(89+dx,151+ang,13,15,'#d3e1e7');
+ // Jigger is in the foreground, its liquid level visible
+ rect(211,151,18,3,'#e8e3d3');rect(214,154,12,19,'#a3b9c7');
+ if(jiggerMl){let h=Math.round(jiggerMl/60*17);rect(216,172-h,8,h,colors[jiggerIngredient]||'#e8ae71')}
+ txt(jiggerMl+'/60',206,184,'#fff2d4');
+ // Central mixing glass and pouring animation
+ rect(139,131,43,5,'#e4f1ef');rect(142,136,4,37,'#c1dce6');rect(176,136,4,37,'#c1dce6');rect(143,171,35,5,'#e0edf0');
+ const amount=total(),entries=Object.entries(liquid).filter(([k,v])=>v>0),dominant=entries.sort((a,b)=>b[1]-a[1])[0]?.[0];
+ if(amount){const level=Math.min(34,Math.round(amount/280*34)),wave=Math.sin(t*8)*1.5;rect(146,170-level+wave,30,level-wave,colors[dominant]||'#e5a46e');rect(149,170-level+wave,4,level-wave,'#ffffff44')}
+ if(ice)for(let i=0;i<4;i++)rect(149+i*7,163-i%2*6,6,5,'#eaf7ff');
+ if(garnish){rect(175,131,11,5,colors[garnish]);rect(181,127,4,5,'#77b67e')}
+ const stirring=Date.now()-stirAnim<650,transferring=Date.now()-transferAnim<680;
+ if(stirring){rect(158+Math.sin(t*23)*9,125,2,43,'#e3dbbe');for(let i=0;i<3;i++)rect(151+i*8,162+Math.sin(t*24+i)*3,5,2,'#eff9f4')}
+ if(transferring){rect(203,124,17,13,'#c1d5dd');rect(198,135,4,15,'#e8c68a');for(let i=0;i<4;i++)rect(194-i*10,147+i*4,3,5,'#f4c078')}
+ if(pourActive&&selected){rect(252,101,12,26,colors[selected]);rect(255,95,6,7,'#e9d5b4');rect(248,126,4,10,colors[selected]);for(let i=0;i<4;i++)rect(247-i*5,136+i*4+Math.sin(t*12+i)*2,3,5,colors[selected])}
+ // First-person hands appear only during manipulation
+ if(pourActive){rect(264,145,30,13,'#d7a48b');rect(285,151,35,21,'#a46d63')}
+ if(stirring){rect(155,174,15,8,'#d7a48b');rect(155,180,23,5,'#a46d63')}
+ if(sh){rect(69,174,34,11,'#d7a48b');rect(69,182,40,5,'#a46d63')}
  particles=particles.filter(p=>p.life>0);for(const p of particles){rect(p.x,p.y,3,3,p.c);p.x+=p.vx;p.y+=p.vy;p.vy+=.06;p.life--}
- txt('LAST CALL',12,11,'#f6d7a2');txt('CA DEM',276,11,'#f6d7a2');
+ txt('LAST CALL',12,10,'#ffe2ad');txt('GOC NHIN BARTENDER',201,10,'#ffe2ad');
  requestAnimationFrame(draw);
 }
 draw();nextOrder();
