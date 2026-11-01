@@ -1,218 +1,90 @@
 <!doctype html>
-<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><meta name="theme-color" content="#21192c"><title>LAST CALL | Pixel Bartender</title>
+<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#130f16"><title>LAST CALL | Bartender Studio</title>
 <style>
-*{box-sizing:border-box}body{margin:0;background:#17121e;color:#fbe6bd;font:14px system-ui,sans-serif}main{max-width:490px;margin:auto;background:#292037;min-height:100dvh;padding-bottom:22px}header{display:flex;justify-content:space-between;align-items:center;padding:14px;background:#181421;border-bottom:3px solid #a56b63}h1{font-size:20px;margin:0;color:#ffcf82}.small{font-size:11px;color:#cbb5ba}canvas{display:block;width:100%;image-rendering:pixelated;background:#352b43}.stats{display:flex;justify-content:space-between;padding:9px 13px;background:#49354d}.card{background:#1e1a2c;margin:10px;padding:12px;border:2px solid #986b73;border-radius:8px}.card h2{margin:0 0 6px;color:#ffd38c;font-size:17px}.card p{font-size:12px;line-height:1.5}.track{height:8px;background:#59485a;border-radius:6px;overflow:hidden}.track div{height:100%;background:#8dd3ac;width:100%}.controls{padding:0 10px}.label{font-size:12px;color:#e7bb86;margin:14px 0 7px;letter-spacing:1px}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.tools{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}.bottom{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}button{border:2px solid #a47a8d;border-bottom-width:4px;border-radius:8px;background:#58445f;color:#fff0d2;font:inherit;font-size:12px;min-height:53px;padding:7px;touch-action:none;cursor:pointer}button:active{transform:translateY(2px)}button.active{background:#966b52;border-color:#ffd18b}button strong{display:block;color:#ffd18b;font-size:15px}button:disabled{opacity:.4}#pour{width:100%;margin-top:8px;background:#9a6d47;border-color:#eec381;font-weight:700}#serve{background:#47765b;border-color:#8dc89e}#reset{background:#855654;border-color:#d99b8a}.feedback{margin:12px 10px;padding:12px;background:#1b1827;border-left:4px solid #e7b87b;font-size:12px;min-height:50px}.overlay{position:fixed;inset:0;background:#0e0a17e9;display:none;align-items:center;justify-content:center;padding:20px}.overlay.show{display:flex}.dialog{background:#30253b;border:3px solid #efbd7b;border-radius:12px;padding:20px;width:min(400px,100%);text-align:center}.dialog h2{color:#ffce86}.dialog button{width:100%;background:#46785d}.score{font-size:42px;font-weight:900;color:#ffcd85}.hint{font-size:11px;color:#c6b5c8;margin-top:5px}
-.meter{height:20px;background:#161322;border:2px solid #aa7a7b;border-radius:5px;margin-top:9px;position:relative;overflow:hidden}.meter #meterFill{height:100%;width:0;background:linear-gradient(90deg,#e6b06e,#ffdd92);transition:width .08s}.meter #meterTarget{position:absolute;top:0;bottom:0;left:0;border-left:3px dashed #fff1a5}.meterText{font-size:11px;margin:5px 0;color:#f1c998}#shakeZone{display:flex;align-items:center;gap:12px;margin-top:10px;padding:10px;border:2px dashed #b68f92;border-radius:9px;background:#342b40;touch-action:none;user-select:none;min-height:82px}#shakerIcon{font-size:42px;transform:rotate(0deg);transition:transform .07s}#shakeZone.active{border-color:#ffd68d;background:#554059}#shakeZone b{font-size:12px;color:#ffe1a3}canvas{touch-action:none}.feedback{line-height:1.5}button:focus-visible{outline:3px solid #ffe3a2}
-#transfer{width:100%;margin-top:7px;background:#496f6d;border-color:#98c5bd;font-weight:700}#transfer:disabled{opacity:.45}#shakeZone{overflow:hidden}#shakerIcon{will-change:transform}.stirring #shakerIcon{animation:stirspin .5s ease-in-out}@keyframes stirspin{0%{transform:rotate(0deg)}30%{transform:rotate(22deg)}65%{transform:rotate(-20deg)}100%{transform:rotate(0deg)}}.shaking #shakerIcon{animation:shakemove .28s linear 2}@keyframes shakemove{0%{transform:translateX(-12px) rotate(-20deg)}50%{transform:translateX(12px) rotate(20deg)}100%{transform:translateX(-12px) rotate(-20deg)}}
- .gameViewport{position:relative;overflow:hidden;background:#16111d}#scene{width:100%;height:auto;display:block;aspect-ratio:320/185;image-rendering:pixelated;cursor:crosshair}.sceneHint{position:absolute;bottom:5px;left:6px;right:6px;background:#1d1826d9;border:1px solid #aa8266;border-radius:4px;padding:5px 6px;text-align:center;color:#ffdfb2;font-size:9px;pointer-events:none;letter-spacing:.2px}.panelHeader{display:flex;justify-content:space-between;align-items:center;padding:9px 12px;background:#35273b;border-top:2px solid #a77b65;border-bottom:1px solid #775b66;font-weight:700}.panelHeader button{min-height:35px;padding:5px 10px;background:#6d4d58;border-color:#c19a79}.controls[hidden]{display:none}.gameViewport:after{content:'';position:absolute;inset:0;pointer-events:none;background:linear-gradient(115deg,#fff7d90c 0%,transparent 42%,#100b1b29 100%)}.card{box-shadow:0 4px 0 #130e1c}#scene:focus{outline:2px solid #ffd68b}
-</style></head><body><main><header><div><h1>🍸 LAST CALL</h1><div class="small">PIXEL BARTENDER · CA ĐÊM</div></div><div style="text-align:right"><b id="money">0 xu</b><div class="small" id="count">0 khách</div></div></header>
-<div class="gameViewport"><canvas id="scene" width="320" height="185"></canvas><div class="sceneHint" id="sceneHint">TRẠM INOX · CHẠM ĐÁ / TRÁI CÂY / CHAI · VUỐT NỀN ĐỂ NHÌN</div></div><div class="stats"><span id="volume">🥃 0 ml</span><span id="tech">Lắc 0 · Khuấy 0</span><span id="timer">0s</span></div>
-<section class="card"><h2 id="customer"></h2><p id="order"></p><div class="track"><div id="bar"></div></div><p id="contents">Ly trống</p></section>
-<div class="panelHeader"><span>🎛 BẢNG ĐIỀU KHIỂN</span><button id="togglePanel" aria-expanded="false">MỞ BẢNG ▾</button></div><div class="controls" id="controlPanel" hidden><div class="label">① ĐONG NGUYÊN LIỆU BẰNG JIGGER</div><div class="grid" id="ingredients"></div><div class="meter"><div id="meterFill"></div><div id="meterTarget"></div></div><div class="meterText" id="meterText">Chọn nguyên liệu để xem định lượng</div><button id="pour" disabled>CHỌN NGUYÊN LIỆU</button><button id="transfer" disabled>↪ ĐỔ JIGGER VÀO BÌNH PHA</button><div class="hint">Giữ nút để rót vào jigger 60 ml, thả ở vạch vàng, sau đó đổ vào bình pha. Có thể đong nhiều lượt.</div>
-<div class="label">② KỸ THUẬT PHA CHẾ</div><div class="tools"><button id="ice">🧊<strong>Đá</strong></button><button id="shake">🥤<strong>Shaker</strong></button><button id="stir">🥄<strong>Khuấy</strong></button><button id="garnish">🍋<strong>Garnish</strong></button></div>
-<div id="shakeZone"><div id="shakerIcon">🥤</div><div><b>SHAKE ZONE</b><div class="hint">Vuốt trái ↔ phải để lắc · <span id="shakeProgress">0 nhịp</span></div></div></div><div class="bottom"><button id="serve">✓ PHỤC VỤ</button><button id="reset">↺ LÀM LẠI</button></div></div><div class="feedback" id="feedback">Chào mừng! Hãy pha đồ uống đầu tiên.</div></main>
-<div class="overlay" id="overlay"><div class="dialog"><h2 id="resultTitle"></h2><div class="score" id="score"></div><p id="details"></p><button id="next">KHÁCH TIẾP THEO →</button></div></div>
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#0c0a10;color:#f7e6d0;font-family:system-ui,-apple-system,sans-serif}button{font:inherit;cursor:pointer;touch-action:manipulation}main{max-width:1180px;margin:auto;min-height:100dvh;background:#141018;box-shadow:0 0 90px #000}header{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 18px;background:linear-gradient(110deg,#2c1a20,#130f17);border-bottom:1px solid #76523c}h1{margin:0;font-size:19px;letter-spacing:2px;color:#f6ce95}small{font-size:11px;color:#d3b8a3}.wallet{font-size:12px;text-align:right;color:#f5d29a}.stage{position:relative;overflow:hidden;background:#19121a}canvas{display:block;width:100%;height:auto;aspect-ratio:960/540;touch-action:none}.hud{position:absolute;top:12px;right:12px;width:min(270px,33%);padding:12px;background:#251b1ee8;border:1px solid #d7a96d;border-radius:12px;box-shadow:0 8px 24px #0009;backdrop-filter:blur(6px)}.hud h2{margin:0 0 6px;font-size:16px;color:#ffd29a}.hud p{font-size:12px;margin:5px 0;line-height:1.5}.hud .recipe{font-size:12px;color:#f6d6a8}.progress{height:5px;background:#4b3a38;border-radius:6px;margin-top:8px;overflow:hidden}.progress div{height:100%;width:100%;background:#d4b07a}.stageTip{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);padding:7px 14px;background:#1c141bdc;border:1px solid #ae7d56;border-radius:22px;white-space:nowrap;font-size:11px;max-width:95%;overflow:hidden;text-overflow:ellipsis}.workspace{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:12px 18px;background:linear-gradient(#29202a,#19151c);border-top:1px solid #906b53}.message{font-size:13px;color:#e9d0b2;line-height:1.45}.actions{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end}.actions button,.panel button,.modal button{background:#4b3439;border:1px solid #b38a63;border-radius:8px;color:#ffe4bf;padding:10px 12px;font-weight:700;font-size:12px}.actions button.primary,.modal button{background:#86603d;border-color:#f0c28d}.actions button:active,.panel button:active{transform:translateY(2px)}.panel{padding:12px 18px;background:#17131b;border-top:1px solid #4e3940}.panel summary{cursor:pointer;color:#e9bd85;font-weight:700;font-size:13px}.panelGrid{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-top:12px}.panelGrid button{min-height:49px}.panelGrid button.selected{border-color:#ffdc8e;background:#856045}.meter{margin-top:12px;display:flex;align-items:center;gap:10px;font-size:12px}.meterTrack{flex:1;height:15px;border-radius:8px;background:#342932;border:1px solid #b48b72;overflow:hidden;position:relative}.meterFill{height:100%;background:linear-gradient(90deg,#b97c46,#ffd18b);width:0}.meterMark{position:absolute;left:50%;height:100%;top:0;border-left:2px dashed white}.footer{padding:12px 18px;font-size:11px;color:#ab938e}.modal{position:fixed;inset:0;background:#070509df;display:none;align-items:center;justify-content:center;padding:20px;z-index:10}.modal.show{display:flex}.modalContent{width:min(420px,100%);text-align:center;padding:24px;background:#29202b;border:2px solid #d8a774;border-radius:14px}.modal h2{color:#ffdc9f}.modal .score{font-size:50px;font-weight:900;color:#f6cb84}.modal p{line-height:1.6}@media(max-width:640px){header{padding:9px 12px}h1{font-size:15px}.stage canvas{min-height:270px;object-fit:cover}.hud{top:7px;right:7px;width:40%;padding:8px}.hud h2{font-size:12px}.hud p,.hud .recipe{font-size:10px}.stageTip{bottom:6px;font-size:9px;padding:5px 8px}.workspace{grid-template-columns:1fr;padding:10px 12px}.actions{justify-content:stretch}.actions button{flex:1}.panel{padding:10px 12px}.panelGrid{grid-template-columns:repeat(3,1fr)}}
+</style></head><body><main><header><div><h1>🍸 LAST CALL <span style="font-size:11px;color:#bfa18b">STUDIO</span></h1><small>FIRST PERSON · BARTENDER SIMULATOR</small></div><div class="wallet"><div id="money">🪙 0 xu</div><div id="served">0 khách đã phục vụ</div></div></header>
+<div class="stage"><canvas id="scene" width="960" height="540" aria-label="Quầy bar tương tác"></canvas><aside class="hud"><h2 id="orderName">Đơn hàng</h2><p id="guest">Khách hàng</p><div class="recipe" id="recipe"></div><p id="clock">⏱ 0s</p><div class="progress"><div id="timebar"></div></div></aside><div class="stageTip" id="tip">CHẠM CHAI ĐỂ CHỌN · GIỮ ĐỂ RÓT · CHẠM JIGGER ĐỂ ĐỔ · VUỐT SHAKER ĐỂ LẮC</div></div>
+<div class="workspace"><div class="message" id="message">Chào mừng đến LAST CALL. Hãy pha đồ uống đầu tiên!</div><div class="actions"><button id="ice">🧊 Thêm đá</button><button id="garnish">🍋 Trang trí</button><button id="stir">🥄 Khuấy</button><button id="serve" class="primary">✓ Phục vụ</button></div></div>
+<details class="panel" id="panel"><summary>🎛 BẢNG ĐIỀU KHIỂN · DỤNG CỤ VÀ ĐỊNH LƯỢNG</summary><div class="panelGrid" id="ingredients"></div><div class="meter"><span id="jiggerText">Jigger 0 / 60 ml</span><div class="meterTrack"><div class="meterFill" id="fill"></div><div class="meterMark" id="mark"></div></div></div><div class="panelGrid" style="grid-template-columns:repeat(3,1fr)"><button id="pour">Giữ để rót</button><button id="transfer">↪ Đổ jigger</button><button id="shake">🥤 Shake</button></div></details><div class="footer">Bản concept tương tác · Đồ họa phối cảnh giả 3D bằng Canvas · Chạm trực tiếp vào dụng cụ trên quầy.</div></main>
+<div class="modal" id="modal"><div class="modalContent"><h2 id="resultTitle"></h2><div class="score" id="score"></div><p id="breakdown"></p><button id="next">KHÁCH TIẾP THEO →</button></div></div>
 <script>
 'use strict';
+const $=id=>document.getElementById(id),C=$('scene'),g=C.getContext('2d');
 const recipes=[
-{name:'SUNSET FIZZ',guest:'Mai',items:{Cam:60,Chanh:20,Soda:90,Siro:15},method:'stir',steps:5,garnish:'Cam',time:120},
-{name:'BERRY BREEZE',guest:'An',items:{Dâu:70,Chanh:15,Soda:80,Siro:10},method:'shake',steps:6,garnish:'Dâu',time:125},
+{name:'SUNSET FIZZ',guest:'Mai',items:{Cam:60,Chanh:20,Soda:90,Siro:15},method:'stir',steps:5,garnish:'Cam',time:130},
+{name:'BERRY BREEZE',guest:'An',items:{Dâu:70,Chanh:15,Soda:80,Siro:10},method:'shake',steps:6,garnish:'Dâu',time:130},
 {name:'GOLDEN HOUR',guest:'Khánh',items:{Cam:50,Dâu:30,Soda:100,Siro:10},method:'stir',steps:7,garnish:'Chanh',time:130}];
-const colors={Cam:'#f5a14c',Chanh:'#d7df6c',Soda:'#a6d8ed',Siro:'#b55f92',Dâu:'#d95372'};
-const $=id=>document.getElementById(id);
-let stationPulse=0,stationType='',viewX=0,viewVelocity=0,panStart=0,panStartView=0,panMoved=false,canvasDrag=null,canvasStartX=0,canvasLastX=0,canvasLastDir=0,canvasLastStep=0,canvasPourTimer=null,canvasSelectedBottle=null,canvasGlow=0,jiggerMl=0,jiggerIngredient=null,transferAnim=0,stirAnim=0,idx=0,cash=0,served=0,selected=null,liquid={},ice=false,shake=0,stir=0,garnish=null,started=Date.now(),finished=false,pourInterval=null,pourActive=false,pourStart=0,shakeAnim=0,particles=[],mood=0,customerEntering=0;
-const recipe=()=>recipes[idx%recipes.length],total=()=>Object.values(liquid).reduce((a,b)=>a+b,0),say=s=>$('feedback').textContent=s;
-const target=()=>selected?Math.max(0,(recipe().items[selected]||0)-(liquid[selected]||0)):0;
-function refresh(){
- $('volume').textContent='🥃 '+total()+' ml'+(ice?' · 🧊':'');
- $('tech').textContent='Lắc '+shake+' · Khuấy '+stir;
- $('contents').textContent=Object.entries(liquid).filter(([k,v])=>v>0).map(([k,v])=>k+' '+v+'ml').join(' · ')||'Ly trống';
- $('pour').textContent=selected?'GIỮ RÓT VÀO JIGGER · '+jiggerMl+' / 60 ml':'CHỌN NGUYÊN LIỆU';
- $('transfer').disabled=finished||jiggerMl<=0;
- $('transfer').textContent=jiggerMl?'↪ ĐỔ '+jiggerMl+' ml '+jiggerIngredient+' VÀO BÌNH':'↪ JIGGER ĐANG TRỐNG';
- $('pour').disabled=!selected||finished;
- $('garnish').innerHTML='🍋<strong>'+(garnish||'Garnish')+'</strong>';
- $('shakeProgress').textContent=shake+' nhịp';
- document.querySelectorAll('[data-name]').forEach(b=>b.classList.toggle('active',b.dataset.name===selected));
- const max=60;
- $('meterFill').style.width=selected?Math.min(100,jiggerMl/max*100)+'%':'0%';
- $('meterTarget').style.left=selected?Math.min(100,target()/max*100)+'%':'0%';
- $('meterText').textContent=selected?'Jigger '+jiggerMl+'/60 ml · Cần thêm '+target()+' ml '+selected+(target()>60?' (đong nhiều lượt)':''):'Chọn nguyên liệu để xem định lượng';
-}
-function clearGlass(){stopPour();jiggerMl=0;jiggerIngredient=null;transferAnim=0;selected=null;liquid={};ice=false;shake=0;stir=0;garnish=null;finished=false;particles=[];refresh();}
-function nextOrder(){clearGlass();started=Date.now();customerEntering=Date.now();mood=0;const r=recipe();$('customer').textContent='🛎 '+r.guest+' | '+r.name;$('order').textContent=Object.entries(r.items).map(([k,v])=>k+' '+v+'ml').join(' · ')+' · '+(r.method==='shake'?'Lắc ':'Khuấy ')+r.steps+' nhịp · Đá · Trang trí '+r.garnish;$('overlay').classList.remove('show');say(r.guest+': Cho mình một '+r.name+' nhé!');}
-$('ingredients').innerHTML=Object.keys(colors).map(n=>'<button data-name="'+n+'"><strong style="color:'+colors[n]+'">● '+n+'</strong><small>Nguyên liệu</small></button>').join('');
-document.querySelectorAll('[data-name]').forEach(b=>b.onclick=()=>{if(jiggerMl>0&&jiggerIngredient!==b.dataset.name){say('Hãy đổ hoặc bỏ phần trong jigger trước khi đổi chai.');return;}selected=b.dataset.name;refresh();say('Đã cầm chai '+selected+'. Đong vào jigger theo vạch vàng.')});
-function spawn(x,y,c,n=8){for(let i=0;i<n;i++)particles.push({x,y,vx:(Math.random()-.5)*2,vy:-Math.random()*2-.5,life:35+Math.random()*18,c})}
-function stopPour(){if(pourInterval){clearInterval(pourInterval);pourInterval=null;}if(pourActive){pourActive=false;const got=jiggerMl,goal=Math.min(60,target());if(goal>0)say(Math.abs(got-goal)<=4?'🎯 Đong chính xác!':got>goal?'⚠️ Rót quá '+(got-goal)+' ml.':'Còn thiếu '+(goal-got)+' ml.');refresh();}}
-function addPour(){if(!selected||finished||jiggerMl>=60)return;if(jiggerIngredient&&jiggerIngredient!==selected)return;jiggerIngredient=selected;jiggerMl=Math.min(60,jiggerMl+1);if(Math.random()<.8)spawn(237,105,colors[selected],2);refresh();}
-$('pour').addEventListener('pointerdown',e=>{e.preventDefault();if(!selected||finished)return;stopPour();pourActive=true;pourStart=Date.now();addPour();pourInterval=setInterval(addPour,95);try{e.currentTarget.setPointerCapture(e.pointerId)}catch(_){}});
-['pointerup','pointercancel','lostpointercapture'].forEach(e=>$('pour').addEventListener(e,stopPour));window.addEventListener('pointerup',stopPour);window.addEventListener('blur',stopPour);
-$('transfer').onclick=()=>{if(finished||!jiggerMl||!jiggerIngredient)return;stopPour();liquid[jiggerIngredient]=(liquid[jiggerIngredient]||0)+jiggerMl;transferAnim=Date.now();spawn(159,110,colors[jiggerIngredient],16);const amount=jiggerMl,name=jiggerIngredient;jiggerMl=0;jiggerIngredient=null;refresh();say('Đã đổ '+amount+' ml '+name+' từ jigger vào bình pha.');};
-$('ice').onclick=()=>{if(finished)return;ice=true;spawn(165,112,'#e7f8ff',10);refresh();say('🧊 Đá đã vào ly.')};
-function shakeStep(){if(finished)return;shake++;shakeAnim=Date.now();$('shakeZone').classList.remove('shaking');void $('shakeZone').offsetWidth;$('shakeZone').classList.add('shaking');spawn(161,106,'#f1e4bd',6);refresh();if(shake===recipe().steps)say('✨ Đã đủ '+shake+' nhịp lắc!');else say('Shake! '+shake+' nhịp.');}
-$('shake').onclick=()=>{shakeStep();$('shakeZone').scrollIntoView({block:'nearest',behavior:'smooth'})};
-let pointer=null,lastX=0,lastDir=0,lastShakeAt=0;
-$('shakeZone').addEventListener('pointerdown',e=>{if(finished)return;pointer=e.pointerId;lastX=e.clientX;lastDir=0;try{e.currentTarget.setPointerCapture(e.pointerId)}catch(_){};$('shakeZone').classList.add('active')});
-$('shakeZone').addEventListener('pointermove',e=>{if(pointer!==e.pointerId||finished)return;const dx=e.clientX-lastX,dir=Math.sign(dx);if(Math.abs(dx)>24){if(dir!==lastDir&&Date.now()-lastShakeAt>115){shakeStep();lastShakeAt=Date.now();lastDir=dir;}lastX=e.clientX;}});
-function endShake(){pointer=null;$('shakeZone').classList.remove('active')}
-['pointerup','pointercancel','lostpointercapture'].forEach(e=>$('shakeZone').addEventListener(e,endShake));
-$('stir').onclick=()=>{if(finished)return;stir++;stirAnim=Date.now();$('shakeZone').classList.remove('stirring');void $('shakeZone').offsetWidth;$('shakeZone').classList.add('stirring');spawn(165,112,'#bde6ee',3);refresh();say('Khuấy '+stir+' nhịp.')};
-$('garnish').onclick=()=>{if(finished)return;const a=[null,'Cam','Chanh','Dâu'];garnish=a[(a.indexOf(garnish)+1)%a.length];refresh();say('Trang trí: '+(garnish||'không'))};
-$('reset').onclick=()=>{clearGlass();say('Đã thay ly mới. Đồng hồ vẫn chạy!')};
-$('serve').onclick=()=>{
- if(finished)return;stopPour();if(jiggerMl>0){say('⚠️ Jigger vẫn còn nguyên liệu. Hãy đổ vào bình trước khi phục vụ.');return;}finished=true;
- const r=recipe(),keys=new Set([...Object.keys(r.items),...Object.keys(liquid)]);let error=0;
- keys.forEach(k=>error+=Math.abs((r.items[k]||0)-(liquid[k]||0)));
- const required=Object.values(r.items).reduce((a,b)=>a+b,0),a=Math.max(0,Math.round(45*(1-error/(required*1.4))));
- const steps=r.method==='shake'?shake:stir,other=r.method==='shake'?stir:shake;
- let b=Math.max(0,Math.round(30*(1-Math.abs(steps-r.steps)/r.steps-other*.12)));if(!ice)b=Math.max(0,b-8);
- const c=garnish===r.garnish?15:garnish?6:0,elapsed=(Date.now()-started)/1000;
- const d=Math.max(0,Math.round(10*(1-Math.max(0,elapsed-r.time/2)/(r.time/2))));
- const score=Math.min(100,a+b+c+d),pay=score>=50?25:10,tip=Math.round(score/12);
- cash+=pay+tip;served++;mood=score>=70?1:-1;
- $('money').textContent=cash+' xu';$('count').textContent=served+' khách';
- $('resultTitle').textContent=score>=90?'🌟 XUẤT SẮC':score>=70?'✨ HÀI LÒNG':score>=50?'🙂 CẦN LUYỆN THÊM':'💔 CHƯA ĐẠT';
- $('score').textContent=score+'/100';
- $('details').innerHTML='Định lượng: '+a+'/45<br>Kỹ thuật: '+b+'/30<br>Trang trí: '+c+'/15<br>Tốc độ: '+d+'/10<br><br>Thời gian: '+Math.round(elapsed)+'s<br>Doanh thu: +'+pay+' xu · Tip: +'+tip+' xu';
- $('overlay').classList.add('show');
-};
-$('next').onclick=()=>{idx++;nextOrder()};
-setInterval(()=>{if(finished)return;const e=(Date.now()-started)/1000,r=recipe();$('timer').textContent='⏱ '+Math.round(e)+'s';$('bar').style.width=Math.max(0,100*(1-e/r.time))+'%';$('bar').style.background=e>r.time*.75?'#e17b73':'#8dd3ac';},250);
-const canvas=$('scene'),ctx=canvas.getContext('2d');ctx.imageSmoothingEnabled=false;
-function rect(x,y,w,h,c){ctx.fillStyle=c;ctx.fillRect(Math.round(x),Math.round(y),w,h)}
-function txt(s,x,y,c='#ffe1a5'){ctx.font='bold 8px monospace';ctx.fillStyle=c;ctx.fillText(s,x,y)}
+const names=['Cam','Chanh','Soda','Siro','Dâu'],colors=['#e5a04d','#cedb76','#9bcad4','#a85c7d','#cf5269'];
+let index=0,coins=0,served=0,selected='Cam',liquid={},jigger=0,jiggerName=null,ice=false,garnish=null,shake=0,stir=0,started=Date.now(),done=false,hold=null,gesture=null,prevX=0,lastDir=0,lastMove=0,shakeAt=0,stirAt=0,pourAt=0,transferAt=0,particles=[];
+const recipe=()=>recipes[index%recipes.length],amount=()=>Object.values(liquid).reduce((a,b)=>a+b,0);
+function say(t){$('message').textContent=t}
+function sync(){const needed=Math.max(0,(recipe().items[selected]||0)-(liquid[selected]||0));$('jiggerText').textContent='Jigger '+jigger+' / 60 ml · '+selected+' cần '+needed+' ml';$('fill').style.width=jigger/60*100+'%';$('mark').style.left=Math.min(100,Math.min(60,needed)/60*100)+'%';document.querySelectorAll('[data-bottle]').forEach(b=>b.classList.toggle('selected',b.dataset.bottle===selected));$('tip').textContent='JIGGER '+jigger+'/60 ML · '+amount()+' ML TRONG BÌNH · LẮC '+shake+' · KHUẤY '+stir}
+function reset(){stopPour();liquid={};jigger=0;jiggerName=null;ice=false;garnish=null;shake=0;stir=0;done=false;started=Date.now();$('orderName').textContent=recipe().name;$('guest').textContent='🛎 '+recipe().guest+' đang chờ';$('recipe').innerHTML=Object.entries(recipe().items).map(([k,v])=>k+' '+v+' ml').join(' · ')+'<br>'+(recipe().method==='shake'?'Shake':'Khuấy')+' '+recipe().steps+' nhịp · Đá · '+recipe().garnish;$('modal').classList.remove('show');say(recipe().guest+': Cho mình một '+recipe().name+' nhé!');sync()}
+function choose(n){if(jigger>0&&jiggerName!==n){say('Jigger còn '+jiggerName+'. Đổ trước khi đổi nguyên liệu.');return false}selected=n;sync();return true}
+function pour(){if(done||jigger>=60)return;if(jiggerName&&jiggerName!==selected)return;jiggerName=selected;jigger=Math.min(60,jigger+1);pourAt=Date.now();if(Math.random()<.4)spark(655,410,colors[names.indexOf(selected)],2);sync()}
+function startPour(){if(done)return;stopPour();pour();hold=setInterval(pour,85)}
+function stopPour(){if(hold){clearInterval(hold);hold=null}}
+function transfer(){stopPour();if(done||!jigger)return;liquid[jiggerName]=(liquid[jiggerName]||0)+jigger;transferAt=Date.now();spark(510,430,colors[names.indexOf(jiggerName)],15);say('Đã đổ '+jigger+' ml '+jiggerName+' từ jigger vào bình.');jigger=0;jiggerName=null;sync()}
+function shakeStep(){if(done)return;shake++;shakeAt=Date.now();spark(385,396,'#e7e4d7',7);say('Shake '+shake+' nhịp');sync()}
+function stirStep(){if(done)return;stir++;stirAt=Date.now();spark(510,424,'#e5e8e1',3);say('Khuấy '+stir+' nhịp');sync()}
+$('ingredients').innerHTML=names.map((n,i)=>'<button data-bottle="'+n+'">'+['🍊','🍋','💧','🍯','🍓'][i]+' '+n+'</button>').join('');
+document.querySelectorAll('[data-bottle]').forEach(b=>b.onclick=()=>choose(b.dataset.bottle));
+$('pour').addEventListener('pointerdown',e=>{e.preventDefault();startPour();try{e.currentTarget.setPointerCapture(e.pointerId)}catch(_){}});['pointerup','pointercancel','lostpointercapture'].forEach(k=>$('pour').addEventListener(k,stopPour));
+$('transfer').onclick=transfer;$('shake').onclick=shakeStep;$('stir').onclick=stirStep;
+$('ice').onclick=()=>{if(done)return;ice=true;spark(235,415,'#e8f7ff',16);say('Đã xúc đá từ thùng inox vào bình.')};
+$('garnish').onclick=()=>{if(done)return;const a=[null,'Cam','Chanh','Dâu'];garnish=a[(a.indexOf(garnish)+1)%a.length];say('Trang trí: '+(garnish||'chưa có'))};
+$('serve').onclick=()=>{if(done)return;stopPour();if(jigger){say('Hãy đổ hết jigger vào bình trước khi phục vụ.');return}done=true;const r=recipe();let error=0;for(const k of new Set([...Object.keys(r.items),...Object.keys(liquid)]))error+=Math.abs((r.items[k]||0)-(liquid[k]||0));const sum=Object.values(r.items).reduce((a,b)=>a+b,0),measure=Math.max(0,Math.round(45*(1-error/(sum*1.3)))),steps=r.method==='shake'?shake:stir,other=r.method==='shake'?stir:shake,tech=Math.max(0,Math.round(30*(1-Math.abs(steps-r.steps)/r.steps-other*.12)-(ice?0:8))),dec=garnish===r.garnish?15:garnish?6:0,elapsed=(Date.now()-started)/1000,speed=Math.max(0,Math.round(10*(1-Math.max(0,elapsed-r.time/2)/(r.time/2)))),score=Math.min(100,measure+tech+dec+speed);coins+=10+Math.round(score/7);served++;$('money').textContent='🪙 '+coins+' xu';$('served').textContent=served+' khách đã phục vụ';$('resultTitle').textContent=score>=85?'🌟 Tuyệt vời!':score>=65?'✨ Khách hài lòng':'🍹 Cần luyện tập';$('score').textContent=score+'/100';$('breakdown').innerHTML='Định lượng '+measure+'/45 · Kỹ thuật '+tech+'/30<br>Trang trí '+dec+'/15 · Thời gian '+speed+'/10';$('modal').classList.add('show')};
+$('next').onclick=()=>{index++;reset()};
+function spark(x,y,c,n){for(let i=0;i<n;i++)particles.push({x,y,vx:(Math.random()-.5)*6,vy:-Math.random()*4,life:25+Math.random()*20,c})}
+function pos(e){const r=C.getBoundingClientRect();return{x:(e.clientX-r.left)*960/r.width,y:(e.clientY-r.top)*540/r.height}}
+C.addEventListener('pointerdown',e=>{if(done)return;const p=pos(e);gesture=null;prevX=p.x;lastDir=0;if(p.y>405&&p.x>575&&p.x<940){const i=Math.min(4,Math.floor((p.x-575)/73));if(choose(names[i])){gesture='pour';startPour()}}else if(p.x>615&&p.x<725&&p.y>305&&p.y<445){gesture='jigger'}else if(p.x>325&&p.x<450&&p.y>320&&p.y<475){gesture='shake'}else if(p.x>458&&p.x<572&&p.y>310&&p.y<475){gesture='stir'}else if(p.x>90&&p.x<325&&p.y>355&&p.y<490){$('ice').click()}else if(p.x>580&&p.x<840&&p.y>330&&p.y<405){$('garnish').click()}if(gesture)try{C.setPointerCapture(e.pointerId)}catch(_){}});
+C.addEventListener('pointermove',e=>{if(!gesture||done)return;const p=pos(e),dx=p.x-prevX,dir=Math.sign(dx);if((gesture==='shake'||gesture==='stir')&&Math.abs(dx)>25&&dir!==lastDir&&Date.now()-lastMove>130){gesture==='shake'?shakeStep():stirStep();lastDir=dir;lastMove=Date.now()}if(Math.abs(dx)>25)prevX=p.x});
+function end(){if(gesture==='pour')stopPour();if(gesture==='jigger')transfer();gesture=null}['pointerup','pointercancel','lostpointercapture'].forEach(k=>C.addEventListener(k,end));window.addEventListener('blur',()=>{stopPour();gesture=null});
+function R(x,y,w,h,c){g.fillStyle=c;g.fillRect(x,y,w,h)}function path(points,c){g.fillStyle=c;g.beginPath();g.moveTo(...points[0]);for(const p of points.slice(1))g.lineTo(...p);g.closePath();g.fill()}function ellipse(x,y,rx,ry,c){g.fillStyle=c;g.beginPath();g.ellipse(x,y,rx,ry,0,0,Math.PI*2);g.fill()}function line(x,y,x2,y2,c,w=2){g.strokeStyle=c;g.lineWidth=w;g.beginPath();g.moveTo(x,y);g.lineTo(x2,y2);g.stroke()}function grad(x,y,w,h,top,bottom){const a=g.createLinearGradient(x,y,x,y+h);a.addColorStop(0,top);a.addColorStop(1,bottom);R(x,y,w,h,a)}function text(t,x,y,size=15,c='#fff0d5'){g.fillStyle=c;g.font='bold '+size+'px system-ui';g.fillText(t,x,y)}
+function bottle(x,y,c,h=75){g.save();g.shadowColor=c;g.shadowBlur=10;grad(x-12,y,24,h,c,'#34242a');R(x-5,y-12,10,13,'#d9c1a1');R(x-8,y+25,16,17,'#e8d4b5');R(x-6,y+29,12,8,'#76564b');R(x-9,y+3,4,h-6,'#ffffff55');g.restore()}
 function draw(){
- const t=Date.now()/1000,bob=Math.sin(t*1.65)*1.3,enter=Math.max(0,1-(Date.now()-customerEntering)/750),cx=160+enter*140;
- // First-person viewpoint: back wall and atmospheric bar seating
- rect(0,0,320,185,'#20192d');
- // Extended lounge panorama, scrolling parallax layers
- ctx.save();ctx.translate(-viewX*.28,0);
- for(let i=-3;i<=3;i++){const x=160+i*138;rect(x-45,12,90,72,'#704c5b');rect(x-40,17,80,62,'#29283b');rect(x-34,21,68,51,'#494257');rect(x-26,31,52,2,'#8c6a6b');rect(x-28,49,56,3,'#8c6a6b');for(let j=0;j<5;j++){const bx=x-25+j*11;rect(bx,36,7,12,['#b96c68','#c9a15f','#7ea7a0'][j%3]);rect(bx+2,33,3,3,'#d8c6a4')}}
- ctx.restore();
- for(let y=0;y<94;y+=13)for(let x=(y%26===0?0:-15);x<320;x+=30){rect(x,y,28,11,'#36293e');rect(x+2,y+2,24,7,'#3d3046')}
- rect(0,0,320,6,'#493043');
- // Backbar mirrors and hanging warm lamps
- rect(12,12,67,66,'#a77760');rect(16,16,59,58,'#353348');rect(19,20,53,45,'#4d4257');
- rect(241,12,67,66,'#a77760');rect(245,16,59,58,'#353348');rect(248,20,53,45,'#4d4257');
- for(let i=0;i<2;i++){let x=i?276:44;rect(x-2,0,4,14,'#796078');rect(x-12,14,24,8,'#bc8b57');rect(x-8,22,16,5,'#f6c377');rect(x-16,27,32,10,'#edb15d22')}
- // Background tables and silhouetted patrons
- for(const [x,y] of [[30,80],[280,78],[67,93],[256,92]]){rect(x-9,y-9,18,21,'#514155');rect(x-6,y-19,12,13,'#8f6970');rect(x-11,y+9,22,4,'#6a4d57')}
- rect(0,96,320,5,'#b88762');
- // Depth: warm reflections and glass glints
- for(let i=0;i<8;i++){const x=18+i*42;rect(x,18,2,36,'#f2c88d16');rect(x+5,24,1,23,'#f4ddc41a')}
- rect(0,99,320,15,'#251b31');rect(0,112,320,7,'#6b4550');
- // Extended seating areas on both sides of customer
- ctx.save();ctx.translate(-viewX*.55,0);
- for(let i=-3;i<=3;i++){const x=160+i*170;if(i===0)continue;rect(x-32,93,64,24,'#493747');rect(x-27,86,54,9,'#6a4a55');rect(x-16,72,32,18,'#66505b');rect(x-10,60,20,14,'#aa7b78');rect(x-12,56,24,7,'#3c3447');rect(x-25,111,50,4,'#c08c67');}
- ctx.restore();
- // Guest faces bartender directly from the opposite side
- const outfit=['#4b7a7c','#a26e80','#6c815a'][idx%3],hair=['#3b303e','#53353d','#2b3a44'][idx%3];
- rect(cx-34,85+bob,68,41,outfit);rect(cx-25,67+bob,50,35,'#c9947e');
- rect(cx-28,58+bob,56,17,hair);rect(cx-21,52+bob,44,11,hair);
- rect(cx-17,80+bob,5,4,'#302536');rect(cx+12,80+bob,5,4,'#302536');
- if(mood===1){rect(cx-5,92+bob,12,2,'#a85b62');rect(cx-3,94+bob,8,2,'#a85b62')}
- else if(mood===-1){rect(cx-5,96+bob,12,2,'#a85b62')}else rect(cx-4,93+bob,9,2,'#99545f');
- rect(cx-39,114+bob,18,8,'#c9947e');rect(cx+21,114+bob,18,8,'#c9947e');
- // Guest speech bubble
- rect(cx-56,31+bob,112,18,'#f2dfba');rect(cx-55,32+bob,110,16,'#f2dfba');rect(cx+10,49+bob,7,5,'#f2dfba');
- txt(finished?(mood>0?'NGON LAM! CAM ON!':'MINH MUON LY KHAC'):'CHO MINH '+recipe().name+'!',cx-51,43+bob,'#4b3340');
- // Counter: wide perspective wooden surface in the foreground
- rect(0,122,320,63,'#92654e');
- for(let i=0;i<5;i++){rect(0,136+i*10,320,1,i%2?'#a67556':'#754d47')}
- rect(0,119,320,3,'#f3bf7a');rect(0,122,320,9,'#d3a175');rect(0,131,320,4,'#64404a');
- for(let y=140;y<185;y+=13){rect(0,y,320,2,'#7e544b');for(let x=15;x<320;x+=55)rect(x+(y%26)*2,y+3,2,7,'#aa7859')}
- rect(7,151,91,29,'#674956');rect(222,151,91,29,'#674956');
- // Side workstations become visible while panning
- ctx.save();ctx.translate(-viewX*.75,0);
- for(let i=-2;i<=2;i++){if(i===0)continue;const sx=160+i*225;rect(sx-46,139,92,40,'#5d424c');rect(sx-42,142,84,4,'#d3a275');for(let j=0;j<5;j++){const xx=sx-35+j*16;rect(xx,151,10,23,['#a7c3c9','#b67a73','#bfa06c','#7da9a0'][j%4]);rect(xx+3,147,4,5,'#e3d3b8')}rect(sx-13,176,26,3,'#e0c5a1')}
- ctx.restore();
- // Equipment on bartender's side, arranged around central mixing vessel
- rect(16,142,15,25,'#a5b8c4');rect(13,139,21,4,'#e5d8c4');rect(20,148,7,13,'#d9e2e7');
- rect(47,151,20,19,'#acbfc9');rect(43,147,28,4,'#e5d8c4');
- for(let i=0;i<4;i++){let x=240+i*17;rect(x,143,11,28,[colors.Cam,colors.Chanh,colors.Dâu,colors.Siro][i]);rect(x+3,137,5,7,'#e8d5b4');rect(x+2,154,7,4,'#f8e1bb99')}
- // Shaker tilts and moves on interaction
- const sh=Date.now()-shakeAnim<350,dx=sh?Math.sin(t*65)*12:0,ang=sh?Math.sin(t*65)*5:0;
- rect(85+dx,142+ang,23,31,'#8eacbb');rect(82+dx,139+ang,29,6,'#e1e5de');rect(89+dx,151+ang,13,15,'#d3e1e7');
- // Jigger is in the foreground, its liquid level visible
- rect(211,151,18,3,'#e8e3d3');rect(214,154,12,19,'#a3b9c7');
- if(jiggerMl){let h=Math.round(jiggerMl/60*17);rect(216,172-h,8,h,colors[jiggerIngredient]||'#e8ae71')}rect(217,155,2,14,'#ffffff77');
- txt(jiggerMl+'/60',206,184,'#fff2d4');
- // Central mixing glass and pouring animation
- rect(139,131,43,5,'#e4f1ef');rect(142,136,4,37,'#c1dce6');rect(176,136,4,37,'#c1dce6');rect(143,171,35,5,'#e0edf0');
- const amount=total(),entries=Object.entries(liquid).filter(([k,v])=>v>0),dominant=entries.sort((a,b)=>b[1]-a[1])[0]?.[0];
- if(amount){const level=Math.min(34,Math.round(amount/280*34)),wave=Math.sin(t*8)*1.5;rect(146,170-level+wave,30,level-wave,colors[dominant]||'#e5a46e');rect(149,170-level+wave,4,level-wave,'#ffffff44')}
- if(ice)for(let i=0;i<4;i++)rect(149+i*7,163-i%2*6,6,5,'#eaf7ff');
- if(garnish){rect(175,131,11,5,colors[garnish]);rect(181,127,4,5,'#77b67e')}
- const stirring=Date.now()-stirAnim<650,transferring=Date.now()-transferAnim<680;
- if(stirring){rect(158+Math.sin(t*23)*9,125,2,43,'#e3dbbe');for(let i=0;i<3;i++)rect(151+i*8,162+Math.sin(t*24+i)*3,5,2,'#eff9f4')}
- if(transferring){rect(203,124,17,13,'#c1d5dd');rect(198,135,4,15,'#e8c68a');for(let i=0;i<4;i++)rect(194-i*10,147+i*4,3,5,'#f4c078')}
- if(canvasDrag==='shaker')rect(78,134,37,3,'#ffdc8988');if(canvasDrag==='glass')rect(136,128,48,2,'#ffdc8988');if(Date.now()-canvasGlow<350)rect(236,135,79,2,'#ffdc8988');
- if(pourActive&&selected){rect(252,101,12,26,colors[selected]);rect(255,95,6,7,'#e9d5b4');rect(248,126,4,10,colors[selected]);for(let i=0;i<4;i++)rect(247-i*5,136+i*4+Math.sin(t*12+i)*2,3,5,colors[selected])}
- // First-person hands appear only during manipulation
- if(pourActive){rect(264,145,30,13,'#d7a48b');rect(285,151,35,21,'#a46d63')}
- if(stirring){rect(155,174,15,8,'#d7a48b');rect(155,180,23,5,'#a46d63')}
- if(sh){rect(69,174,34,11,'#d7a48b');rect(69,182,40,5,'#a46d63')}
- particles=particles.filter(p=>p.life>0);for(const p of particles){rect(p.x,p.y,3,3,p.c);p.x+=p.vx;p.y+=p.vy;p.vy+=.06;p.life--}
- // Panning HUD and subtle edge indicators
- rect(110,4,100,3,'#382d3c');rect(152+viewX*.22,4,16,3,'#f0bf80');
- if(Date.now()-stationPulse<420){const xx=stationType==='ice'?40:213;rect(xx-17,132,35,2,'#fff2b4');}if(viewX>25)txt('◀ TRAM PHA',4,178,'#ffdfb2');if(viewX< -25)txt('TRAM PHA ▶',249,178,'#ffdfb2');
- txt('LAST CALL',12,10,'#ffe2ad');txt('GOC NHIN BARTENDER',201,10,'#ffe2ad');
- requestAnimationFrame(draw);
+ const t=performance.now()/1000;
+ // Night lounge with atmospheric perspective and warm hanging lights
+ grad(0,0,960,540,'#271b25','#0b0b14');
+ for(let i=0;i<6;i++){const x=i*195-40;R(x,0,12,260,'#382a2e');R(x+18,25,157,225,'#242536');R(x+26,32,141,207,'#24243c');for(let j=0;j<7;j++)ellipse(x+40+j*18,192+(j%3)*12,2,2,['#efae5b','#e9786a','#d6b0b8'][j%3])}
+ for(let i=0;i<5;i++){const x=72+i*202;line(x,0,x,48,'#78605a',3);ellipse(x,54,36,16,'#8b5b42');ellipse(x,62,25,6,'#f6bd75');g.save();g.globalAlpha=.12;ellipse(x,89,67,58,'#ffc77b');g.restore()}
+ // Distant guests and bar furniture
+ for(let i=0;i<8;i++){const x=i*135-20+Math.sin(t*.4+i)*4,y=252+(i%3)*10;ellipse(x,y-42,14,18,'#5b444b');path([[x-24,y-22],[x+24,y-22],[x+33,y+45],[x-33,y+45]],'#3b303d');ellipse(x,y+41,38,8,'#1b1822')}
+ // Main guest
+ const cx=472,bob=Math.sin(t*1.7)*3;ellipse(cx,190+bob,40,48,'#d7a08a');path([[cx-47,175+bob],[cx-43,127+bob],[cx-10,112+bob],[cx+31,119+bob],[cx+47,172+bob],[cx+28,158+bob],[cx-30,155+bob]],'#38262c');ellipse(cx-16,190+bob,4,4,'#322733');ellipse(cx+16,190+bob,4,4,'#322733');line(cx-8,211+bob,cx+8,211+bob,'#8e4c4d',3);path([[cx-58,232+bob],[cx+57,232+bob],[cx+90,339],[cx-90,339]],['#694d5c','#536c6c','#7b5949'][index%3]);ellipse(cx-65,320,20,12,'#d5a18b');ellipse(cx+65,320,20,12,'#d5a18b');
+ // Stainless counter back rail and high-detail metal surfaces
+ grad(0,328,960,212,'#c7c3bb','#303941');path([[0,334],[960,334],[960,366],[0,375]],'#a9afb1');R(0,358,960,8,'#e9c6a0');R(0,368,960,7,'#4b4c52');
+ path([[0,380],[960,368],[960,540],[0,540]],'#707b81');path([[0,390],[960,380],[960,404],[0,415]],'#c4cdd0');
+ for(let i=0;i<68;i++){const x=20+i*14;ellipse(x,389+(i%3)*2,2,1,'#3e4a50')}
+ // Left ice well
+ path([[32,413],[327,409],[341,505],[24,520]],'#d4d7d4');path([[46,425],[314,421],[323,495],[40,505]],'#31414d');
+ for(let i=0;i<125;i++){const x=49+(i*47)%265,y=430+(i*29)%62;path([[x,y],[x+12,y-5],[x+17,y+5],[x+7,y+12]],i%3?'#b6d1dc':'#e8f2f3');line(x+3,y,x+8,y-2,'#ffffff9c',2)}
+ // Garnish bins in stainless cutouts
+ for(let i=0;i<4;i++){const x=570+i*71;R(x,393,68,87,'#d7d9d5');R(x+5,399,58,74,'#33414a');for(let j=0;j<8;j++){const px=x+16+(j%3)*17,py=410+Math.floor(j/3)*19;ellipse(px,py,11,8,['#f3cf66','#e99a55','#d74b59','#79aa65'][i]);ellipse(px,py,5,4,'#ffe6a5')}}
+ // Sink, tap and tools
+ path([[850,403],[959,402],[959,510],[843,515]],'#aebdc2');R(858,417,102,83,'#35434b');ellipse(910,473,44,26,'#26313a');line(891,432,891,357,'#d7dcd8',10);line(891,357,931,357,'#d7dcd8',9);line(931,357,931,379,'#cbd6d9',7);
+ // Shaker on the left side of mixing area
+ const shakeDx=Date.now()-shakeAt<400?Math.sin(t*52)*18:0;grad(345+shakeDx,343,65,126,'#edf1eb','#6b7d8c');R(341+shakeDx,339,73,14,'#dbe1df');R(354+shakeDx,365,8,94,'#ffffff70');ellipse(378+shakeDx,469,36,7,'#48545c');
+ // Central glass with accurate liquid level
+ R(463,350,97,126,'#d7e6e752');R(471,354,8,111,'#ffffff77');R(548,354,7,111,'#ffffff70');R(464,472,95,10,'#d8e9eb');
+ const sum=amount();if(sum){const h=Math.min(102,sum/290*102),main=Object.entries(liquid).sort((a,b)=>b[1]-a[1])[0]?.[0];R(477,468-h,71,h,colors[names.indexOf(main)]||'#d69d6a');R(479,468-h,6,h,'#ffffff33')}
+ if(ice)for(let i=0;i<7;i++)R(480+(i%4)*17,445-Math.floor(i/4)*16,13,11,'#e5f3f4');
+ if(garnish)ellipse(552,353,17,9,colors[names.indexOf(garnish)]);
+ // Jigger
+ const tilt=Date.now()-transferAt<450?Math.sin(t*13)*.5:0;g.save();g.translate(666,363);g.rotate(tilt);path([[-22,-10],[22,-10],[12,49],[-12,49]],'#d6e1e1');path([[-14,0],[14,0],[8,43],[-8,43]],'#697f8b');if(jigger)R(-9,41-jigger/60*37,18,jigger/60*37,colors[names.indexOf(jiggerName)]);ellipse(0,-11,23,6,'#eef2eb');g.restore();
+ // Speed rail bottles
+ R(565,486,379,54,'#2d343b');R(565,485,379,8,'#bdc9cc');for(let i=0;i<5;i++)bottle(609+i*72,448,colors[i],77);
+ // Pour stream to jigger
+ if(hold){const i=names.indexOf(selected);g.save();g.translate(741,300);g.rotate(-.65);bottle(0,0,colors[i],84);g.restore();line(713,359,667,396,colors[i],5);for(let k=0;k<5;k++)ellipse(711-k*8,361+k*7+Math.sin(t*20+k)*3,3,4,colors[i])}
+ // Stir spoon
+ if(Date.now()-stirAt<550){const sx=Math.sin(t*25)*22;line(505+sx,320,512+sx,457,'#d9e1dc',5);ellipse(512+sx,456,7,4,'#d9e1dc')}
+ // Surface reflections
+ g.save();g.globalAlpha=.18;for(let i=0;i<8;i++){R(i*133+Math.sin(t+i)*8,371,42,2,'#fff1b9')}g.restore();
+ // Moving particles
+ particles=particles.filter(p=>p.life>0);for(const p of particles){R(p.x,p.y,4,4,p.c);p.x+=p.vx;p.y+=p.vy;p.vy+=.15;p.life--}
+ text('LAST CALL',28,36,20,'#f5c58b');text('CA ĐÊM',29,55,11,'#d5b6a4');
+ requestAnimationFrame(draw)
 }
-
-$('togglePanel').onclick=()=>{
- const p=$('controlPanel'),opening=p.hidden;
- p.hidden=!opening;
- $('togglePanel').textContent=opening?'THU GỌN ▴':'MỞ BẢNG ▾';
- $('togglePanel').setAttribute('aria-expanded',String(opening));
-};
-const scene=$('scene');
-scene.setAttribute('role','application');
-scene.setAttribute('aria-label','Quầy bar tương tác: chạm chai để chọn, giữ chai để rót, chạm jigger để chuyển, vuốt shaker để lắc, chạm ly để khuấy');
-function canvasPoint(e){const r=scene.getBoundingClientRect();return{x:(e.clientX-r.left)/r.width*320,y:(e.clientY-r.top)/r.height*185};}
-function bottleAt(p){if(p.y<128||p.y>180)return null;const names=['Cam','Chanh','Dâu','Siro'];for(let i=0;i<4;i++){const x=240+i*17;if(p.x>=x-5&&p.x<=x+15)return names[i]}return null;}
-function stopCanvasPour(){if(canvasPourTimer){clearInterval(canvasPourTimer);canvasPourTimer=null;}if(pourActive)stopPour();}
-scene.addEventListener('pointerdown',e=>{
- if(finished)return;
- const p=canvasPoint(e);canvasStartX=p.x;canvasLastX=p.x;canvasLastDir=0;panStart=p.x;panStartView=viewX;panMoved=false;
- const bottle=bottleAt(p);
- if(bottle){
-  if(jiggerMl&&jiggerIngredient!==bottle){say('Jigger đang chứa '+jiggerIngredient+'. Đổ vào bình trước khi đổi chai.');return;}
-  selected=bottle;canvasSelectedBottle=bottle;canvasDrag='bottle';canvasGlow=Date.now();refresh();
-  pourActive=true;addPour();canvasPourTimer=setInterval(addPour,95);
-  say('Đang rót '+bottle+' vào jigger. Nhấc ngón tay để dừng!');
- }else if(p.x>=12&&p.x<=69&&p.y>=138){
-  $('ice').click();stationType='ice';stationPulse=Date.now();return;
- }else if(p.x>=192&&p.x<=236&&p.y>=117&&p.y<140){
-  $('garnish').click();stationType='fruit';stationPulse=Date.now();return;
- }else if(p.x>=202&&p.x<=239&&p.y>=139){
-  canvasDrag='jigger';say(jiggerMl?'Thả ngón tay để đổ '+jiggerMl+' ml vào bình.':'Jigger đang trống.');
- }else if(p.x>=75&&p.x<=122&&p.y>=133){
-  canvasDrag='shaker';say('Vuốt shaker qua trái phải để lắc.');
- }else if(p.x>=134&&p.x<=190&&p.y>=125){
-  canvasDrag='glass';say('Vuốt qua lại trên ly để khuấy.');
- }else{canvasDrag='pan';try{scene.setPointerCapture(e.pointerId)}catch(_){}return;}
- try{scene.setPointerCapture(e.pointerId)}catch(_){}
-});
-scene.addEventListener('pointermove',e=>{
- if(!canvasDrag||finished)return;
- const p=canvasPoint(e),dx=p.x-canvasLastX,dir=Math.sign(dx);
- if(canvasDrag==='pan'){viewX=Math.max(-165,Math.min(165,panStartView+(panStart-p.x)*1.3));panMoved=panMoved||Math.abs(p.x-panStart)>5;return;}
- if((canvasDrag==='shaker'||canvasDrag==='glass')&&Math.abs(dx)>13&&dir!==canvasLastDir&&Date.now()-canvasLastStep>120){
-  if(canvasDrag==='shaker')shakeStep();else $('stir').click();
-  canvasLastStep=Date.now();canvasLastDir=dir;
- }
- if(Math.abs(dx)>13)canvasLastX=p.x;
-});
-function endCanvasInteraction(){
- if(canvasDrag==='bottle')stopCanvasPour();
- if(canvasDrag==='pan'&&panMoved)say('Đã di chuyển góc nhìn. Vuốt ngược lại để quay về trạm pha chế.');
- if(canvasDrag==='jigger'&&jiggerMl>0)$('transfer').click();
- canvasDrag=null;canvasSelectedBottle=null;
-}
-['pointerup','pointercancel','lostpointercapture'].forEach(ev=>scene.addEventListener(ev,endCanvasInteraction));
-window.addEventListener('blur',()=>{stopCanvasPour();canvasDrag=null});
-
-draw();nextOrder();
+setInterval(()=>{if(done)return;const elapsed=(Date.now()-started)/1000;$('clock').textContent='⏱ '+Math.round(elapsed)+'s';$('timebar').style.width=Math.max(0,100*(1-elapsed/recipe().time))+'%'},300);
+reset();draw();
 </script></body></html>
